@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viktron Health Platforms</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .platform-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .platform-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+        }
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .platform-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: linear-gradient(to right, #f8f9fa, #eee);
+            border-bottom: 1px solid #eee;
+        }
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+        .auraguide .platform-icon {
+            background: #3498db;
+        }
+        .aurapath .platform-icon {
+            background: #e74c3c;
+        }
+        .platform-info {
+            flex: 1;
+            text-align: left;
+        }
+        .platform-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+        }
+        .platform-info p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        .platform-footer {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .btn:hover {
+            background: #2c3e50;
+            color: white;
+        }
+        .auraguide .btn {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        .auraguide .btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        .aurapath .btn {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        .aurapath .btn:hover {
+            background: #e74c3c;
+            color: white;
+        }
+        .footer-note {
+            margin-top: 2.5rem;
+            font-size: 0.9rem;
+            color: #95a5a6;
+            line-height: 1.5;
+        }
+        .redirecting {
+            display: none;
+            margin-top: 1.5rem;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Viktron Health</h1>
+        <p class="subtitle">Innovative AI-powered healthcare solutions</p>
+        
+        <!-- Check if we're on the main domain and redirect to appropriate subdomain for specific paths -->
+        <div id="main-domain-content" style="display: none;">
+            <div class="platform-links">
+                <div class="platform-card auraguide">
+                    <div class="platform-header">
+                        <div class="platform-icon">A</div>
+                        <div class="platform-info">
+                            <h3>AuraGuide</h3>
+                            <p>Caregiver support and guidance platform</p>
+                        </div>
+                    </div>
+                    <div class="platform-footer">
+                        <a href="#" class="btn" id="auraguide-btn">Enter AuraGuide</a>
+                    </div>
+                </div>
+                
+                <div class="platform-card aurapath">
+                    <div class="platform-header">
+                        <div class="platform-icon">P</div>
+                        <div class="platform-info">
+                            <h3>AuraPath</h3>
+                            <p>Patient care and memory prosthetic system</p>
+                        </div>
+                    </div>
+                    <div class="platform-footer">
+                        <a href="#" class="btn" id="aurapath-btn">Enter AuraPath</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-note">
+                <p>Click the buttons above to access each platform directly</p>
+                <p class="redirecting" id="redirecting-msg">Redirecting...</p>
+            </div>
+        </div>
+        
+        <!-- Content for when accessed via subdomain -->
+        <div id="subdomain-content">
+            <div class="platform-card" style="background: #f8f9fa; border: none;">
+                <div class="platform-header" style="background: #f8f9fa;">
+                    <div class="platform-icon" style="background: #95a5a6;">?</div>
+                    <div class="platform-info">
+                        <h3>Platform Access</h3>
+                        <p>You are accessing a Viktron Health subdomain. Please use the links below to navigate to the appropriate platform or return to the main site.</p>
+                    </div>
+                </div>
+                <div class="platform-footer" style="justify-content: center;">
+                    <a href="https://viktronhealth.com" class="btn" style="background: #95a5a6; border-color: #95a5a6; color: white;">Visit Main Site</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Get current hostname and path
+        const hostname = window.location.hostname.toLowerCase();
+        const path = window.location.pathname;
+        
+        // Define main domain and subdomains
+        const mainDomain = 'viktronhealth.com';
+        const auraguideSubdomain = 'auraguide.viktronhealth.com';
+        const aurapathSubdomain = 'aurapath.viktronhealth.com';
+        
+        // Get elements
+        const mainDomainContent = document.getElementById('main-domain-content');
+        const subdomainContent = document.getElementById('subdomain-content');
+        const auraguideBtn = document.getElementById('auraguide-btn');
+        const aurapathBtn = document.getElementById('aurapath-btn');
+        const redirectingMsg = document.getElementById('redirecting-msg');
+        
+        // Check if we're on a subdomain
+        if (hostname === auraguideSubdomain) {
+            // Show subdomain content for auraguide
+            mainDomainContent.style.display = 'none';
+            subdomainContent.style.display = 'block';
+            // Optionally, you could redirect to a specific URL for auraguide subdomain
+            // window.location.href = 'https://auraguide.viktronhealth.com/some-specific-page';
+        } else if (hostname === aurapathSubdomain) {
+            // Show subdomain content for aurapath
+            mainDomainContent.style.display = 'none';
+            subdomainContent.style.display = 'block';
+            // Optionally, you could redirect to a specific URL for aurapath subdomain
+            // window.location.href = 'https://aurapath.viktronhealth.com/some-specific-page';
+        } else {
+            // We're on the main domain or another domain
+            mainDomainContent.style.display = 'block';
+            subdomainContent.style.display = 'none';
+            
+            // Check if path indicates direct access to platforms
+            if (path === '/auraguide' || path === '/auraguide/') {
+                redirectToPlatform(auraguideSubdomain);
+            } else if (path === '/aurapath' || path === '/aurapath/') {
+                redirectToPlatform(aurapathSubdomain);
+            }
+            
+            // Set up button clicks
+            auraguideBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                redirectToPlatform(auraguideSubdomain);
+            });
+            
+            aurapathBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                redirectToPlatform(aurapathSubdomain);
+            });
+        }
+        
+        function redirectToPlatform(url) {
+            // Show redirecting message
+            redirectingMsg.style.display = 'block';
+            
+            // Redirect after a short delay to show the message
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1500);
+        }
+        
+        // Also handle direct access via query parameters for backward compatibility
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect');
+        if (redirect === 'auraguide') {
+            redirectToPlatform(auraguideSubdomain);
+        } else if (redirect === 'aurapath') {
+            redirectToPlatform(aurapathSubdomain);
+        }
+    </script>
+</body>
+</html>
