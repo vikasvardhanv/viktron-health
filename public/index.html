@@ -14,6 +14,7 @@
             justify-content: center;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
         }
         .container {
             text-align: center;
@@ -23,11 +24,17 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             max-width: 500px;
             width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         h1 {
             color: #2c3e50;
             margin-bottom: 1rem;
             font-size: 2rem;
+            letter-spacing: -0.5px;
         }
         .subtitle {
             color: #7f8c8d;
@@ -45,18 +52,34 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
         }
         .platform-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        .platform-card:hover::before {
+            opacity: 0.1;
+        }
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%);
+            transition: opacity 0.3s ease;
         }
         .platform-header {
             display: flex;
             align-items: center;
             padding: 1.5rem;
-            background: linear-gradient(to right, #f8f9fa, #eee);
+            background: linear-gradient(to right, #f8f9fa, #f0f0f0);
             border-bottom: 1px solid #eee;
         }
         .platform-icon {
@@ -71,6 +94,7 @@
             font-size: 1.5rem;
             margin-right: 1.5rem;
             flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .auraguide .platform-icon {
             background: #3498db;
@@ -86,11 +110,13 @@
             margin: 0 0 0.5rem 0;
             color: #2c3e50;
             font-size: 1.3rem;
+            font-weight: 600;
         }
         .platform-info p {
             margin: 0;
             color: #7f8c8d;
             font-size: 0.95rem;
+            line-height: 1.4;
         }
         .platform-footer {
             display: flex;
@@ -113,10 +139,31 @@
             transition: all 0.3s ease;
             text-decoration: none;
             font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.25px;
+            position: relative;
+            overflow: hidden;
         }
         .btn:hover {
             background: #2c3e50;
             color: white;
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn:hover::before {
+            left: 100%;
         }
         .auraguide .btn {
             border-color: #3498db;
@@ -138,13 +185,37 @@
             margin-top: 2.5rem;
             font-size: 0.9rem;
             color: #95a5a6;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .redirecting {
             display: none;
             margin-top: 1.5rem;
             color: #e74c3c;
             font-weight: 600;
+            font-size: 0.95rem;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid currentColor;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -153,8 +224,8 @@
         <h1>Viktron Health</h1>
         <p class="subtitle">Innovative AI-powered healthcare solutions</p>
         
-        <!-- Check if we're on the main domain and redirect to appropriate subdomain for specific paths -->
-        <div id="main-domain-content" style="display: none;">
+        <!-- Main domain content (platform selection) -->
+        <div id="main-domain-content">
             <div class="platform-links">
                 <div class="platform-card auraguide">
                     <div class="platform-header">
@@ -185,12 +256,14 @@
             
             <div class="footer-note">
                 <p>Click the buttons above to access each platform directly</p>
-                <p class="redirecting" id="redirecting-msg">Redirecting...</p>
+                <p class="redirecting" id="redirecting-msg">
+                    Redirecting<span class="loading-spinner"></span>
+                </p>
             </div>
         </div>
         
-        <!-- Content for when accessed via subdomain -->
-        <div id="subdomain-content">
+        <!-- Subdomain content (when accessed via subdomain) -->
+        <div id="subdomain-content" class="hidden">
             <div class="platform-card" style="background: #f8f9fa; border: none;">
                 <div class="platform-header" style="background: #f8f9fa;">
                     <div class="platform-icon" style="background: #95a5a6;">?</div>
@@ -207,8 +280,11 @@
     </div>
     
     <script>
+        // Immediately hide subdomain content to prevent flash
+        document.documentElement.classList.add('js-enabled');
+        
         // Get current hostname and path
-        const hostname = window.location.hostname.toLowerCase();
+        const hostname = window.location.hostname.toLowerCase().replace(/^www\./, '');
         const path = window.location.pathname;
         
         // Define main domain and subdomains
@@ -223,61 +299,70 @@
         const aurapathBtn = document.getElementById('aurapath-btn');
         const redirectingMsg = document.getElementById('redirecting-msg');
         
-        // Check if we're on a subdomain
-        if (hostname === auraguideSubdomain) {
-            // Show subdomain content for auraguide
-            mainDomainContent.style.display = 'none';
-            subdomainContent.style.display = 'block';
-            // Optionally, you could redirect to a specific URL for auraguide subdomain
-            // window.location.href = 'https://auraguide.viktronhealth.com/some-specific-page';
-        } else if (hostname === aurapathSubdomain) {
-            // Show subdomain content for aurapath
-            mainDomainContent.style.display = 'none';
-            subdomainContent.style.display = 'block';
-            // Optionally, you could redirect to a specific URL for aurapath subdomain
-            // window.location.href = 'https://aurapath.viktronhealth.com/some-specific-page';
-        } else {
-            // We're on the main domain or another domain
-            mainDomainContent.style.display = 'block';
-            subdomainContent.style.display = 'none';
-            
-            // Check if path indicates direct access to platforms
-            if (path === '/auraguide' || path === '/auraguide/') {
-                redirectToPlatform(auraguideSubdomain);
-            } else if (path === '/aurapath' || path === '/aurapath/') {
-                redirectToPlatform(aurapathSubdomain);
+        // Function to handle redirects
+        function handleRedirect() {
+            // Check if we're on a subdomain
+            if (hostname === auraguideSubdomain) {
+                // Show subdomain content for auraguide
+                mainDomainContent.classList.add('hidden');
+                subdomainContent.classList.remove('hidden');
+            } else if (hostname === aurapathSubdomain) {
+                // Show subdomain content for aurapath
+                mainDomainContent.classList.add('hidden');
+                subdomainContent.classList.remove('hidden');
+            } else {
+                // We're on the main domain or another domain
+                mainDomainContent.classList.remove('hidden');
+                subdomainContent.classList.add('hidden');
+                
+                // Check if path indicates direct access to platforms
+                if (path === '/auraguide' || path === '/auraguide/' || 
+                    path.includes('/auraguide?') || path.includes('/auraguide#')) {
+                    redirectToPlatform(auraguideSubdomain);
+                } else if (path === '/aurapath' || path === '/aurapath/' || 
+                          path.includes('/aurapath?') || path.includes('/aurapath#')) {
+                    redirectToPlatform(aurapathSubdomain);
+                }
+                
+                // Set up button clicks
+                auraguideBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    redirectToPlatform(auraguideSubdomain);
+                });
+                
+                aurapathBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    redirectToPlatform(aurapathSubdomain);
+                });
             }
-            
-            // Set up button clicks
-            auraguideBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                redirectToPlatform(auraguideSubdomain);
-            });
-            
-            aurapathBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                redirectToPlatform(aurapathSubdomain);
-            });
         }
         
         function redirectToPlatform(url) {
             // Show redirecting message
-            redirectingMsg.style.display = 'block';
+            redirectingMsg.classList.remove('hidden');
             
-            // Redirect after a short delay to show the message
-            setTimeout(() => {
-                window.location.href = url;
-            }, 1500);
+            // Redirect immediately for better UX
+            window.location.href = url;
         }
         
+        // Run immediately on load
+        handleRedirect();
+        
         // Also handle direct access via query parameters for backward compatibility
-        const params = new URLSearchParams(window.location.search);
-        const redirect = params.get('redirect');
-        if (redirect === 'auraguide') {
-            redirectToPlatform(auraguideSubdomain);
-        } else if (redirect === 'aurapath') {
-            redirectToPlatform(aurapathSubdomain);
-        }
+        window.addEventListener('load', function() {
+            const params = new URLSearchParams(window.location.search);
+            const redirect = params.get('redirect');
+            if (redirect === 'auraguide') {
+                redirectToPlatform(auraguideSubdomain);
+            } else if (redirect === 'aurapath') {
+                redirectToPlatform(aurapathSubdomain);
+            }
+        });
+        
+        // Handle popstate for back/forward navigation
+        window.addEventListener('popstate', function() {
+            setTimeout(handleRedirect, 0);
+        });
     </script>
 </body>
 </html>
