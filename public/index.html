@@ -3,11 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viktron Health Platforms</title>
+    <title>Viktron Health - Medical Technology Solutions</title>
     <style>
+        /* Medical Tech Company Color Scheme */
+        :root {
+            --primary-blue: #2563eb;
+            --secondary-blue: #1d4ed8;
+            --accent-teal: #0d9488;
+            --light-blue: #eff6ff;
+            --success-green: #10b981;
+            --warning-amber: #f59e0b;
+            --dark-text: #1e293b;
+            --light-text: #64748b;
+            --border-light: #e2e8f0;
+            --background-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--background-gradient);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -15,267 +29,563 @@
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
+            color: var(--dark-text);
+            line-height: 1.6;
         }
+        
         .container {
             text-align: center;
             background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 500px;
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            max-width: 560px;
             width: 100%;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeInUp 0.6s ease-out;
+            border: 1px solid var(--border-light);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.98);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
         }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
+        
+        .logo-container {
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-blue);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        
+        .logo-text {
             font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
             letter-spacing: -0.5px;
         }
-        .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
+        
+        .tagline {
+            color: var(--light-text);
+            font-size: 1.125rem;
+            margin-bottom: 2.5rem;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
         }
-        .platform-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        
+        .platform-section {
             margin-top: 2rem;
         }
+        
+        .platform-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .platform-title-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+        
+        .platforms-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
         .platform-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-radius: 20px;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid #eee;
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-light);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
-            overflow: hidden;
+            cursor: pointer;
         }
+        
         .platform-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary-blue);
         }
-        .platform-card:hover::before {
-            opacity: 0.1;
-        }
+        
         .platform-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: translateX(-100%);
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+            opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .platform-header {
-            display: flex;
-            align-items: center;
-            padding: 1.5rem;
-            background: linear-gradient(to right, #f8f9fa, #f0f0f0);
-            border-bottom: 1px solid #eee;
+        
+        .platform-card:hover::before {
+            opacity: 1;
         }
-        .platform-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        
+        .platform-header {
+            padding: 1.75rem;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(to bottom, var(--light-blue), white);
+        }
+        
+        .platform-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: white;
-            font-size: 1.5rem;
-            margin-right: 1.5rem;
-            flex-shrink: 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
         }
+        
+        .auraguide .platform-icon-wrapper {
+            background: rgba(37, 99, 235, 0.1);
+        }
+        
+        .aurapath .platform-icon-wrapper {
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .platform-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 1.25rem;
+        }
+        
         .auraguide .platform-icon {
-            background: #3498db;
+            color: var(--primary-blue);
         }
+        
         .aurapath .platform-icon {
-            background: #e74c3c;
+            color: var(--success-green);
         }
+        
         .platform-info {
-            flex: 1;
             text-align: left;
         }
-        .platform-info h3 {
-            margin: 0 0 0.5rem 0;
-            color: #2c3e50;
-            font-size: 1.3rem;
+        
+        .platform-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .platform-badge {
+            font-size: 0.75rem;
             font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .platform-info p {
-            margin: 0;
-            color: #7f8c8d;
+        
+        .auraguide .platform-badge {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+        }
+        
+        .aurapath .platform-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+        }
+        
+        .platform-description {
+            color: var(--light-text);
             font-size: 0.95rem;
-            line-height: 1.4;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
+        
+        .platform-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--light-text);
+        }
+        
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        
+        .auraguide .feature-icon {
+            color: var(--primary-blue);
+        }
+        
+        .aurapath .feature-icon {
+            color: var(--success-green);
+        }
+        
+        .feature-icon::before {
+            content: '•';
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
         .platform-footer {
+            padding: 1.75rem;
+            border-top: 1px solid var(--border-light);
+            background-color: #fafafa;
+        }
+        
+        .platform-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            letter-spacing: 0.25px;
+        }
+        
+        .auraguide-button {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .auraguide-button:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+        
+        .aurapath-button {
+            background: var(--success-green);
+            color: white;
+        }
+        
+        .aurapath-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .platform-button:active {
+            transform: translateY(0);
+        }
+        
+        .platform-button .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .platform-button:hover .arrow-icon {
+            transform: translateX(4px);
+        }
+        
+        .footer-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+            color: var(--light-text);
+            font-size: 0.875rem;
+        }
+        
+        .footer-links {
             display: flex;
             justify-content: center;
-            padding: 1.5rem;
-            background: #f8f9fa;
-            border-top: 1px solid #eee;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
-        .btn {
+        
+        .footer-link {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+        
+        .certification-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: white;
-            color: #2c3e50;
-            border: 2px solid #2c3e50;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            font-size: 0.95rem;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 500;
-            letter-spacing: 0.25px;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(37, 99, 235, 0.2);
         }
-        .btn:hover {
-            background: #2c3e50;
-            color: white;
-            transform: translateY(-2px);
+        
+        .certification-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
         }
-        .btn:active {
-            transform: translateY(0);
-        }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        .btn:hover::before {
-            left: 100%;
-        }
-        .auraguide .btn {
-            border-color: #3498db;
-            color: #3498db;
-        }
-        .auraguide .btn:hover {
-            background: #3498db;
-            color: white;
-        }
-        .aurapath .btn {
-            border-color: #e74c3c;
-            color: #e74c3c;
-        }
-        .aurapath .btn:hover {
-            background: #e74c3c;
-            color: white;
-        }
-        .footer-note {
-            margin-top: 2.5rem;
-            font-size: 0.9rem;
-            color: #95a5a6;
-            line-height: 1.6;
-        }
-        .redirecting {
+        
+        .loading-container {
             display: none;
-            margin-top: 1.5rem;
-            color: #e74c3c;
-            font-weight: 600;
-            font-size: 0.95rem;
-            animation: pulse 1.5s infinite;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
         }
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
+        
         .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid currentColor;
-            border-top-color: transparent;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-light);
+            border-top-color: var(--primary-blue);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-left: 8px;
-            vertical-align: middle;
+            animation: spin 1s linear infinite;
         }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
         .hidden {
             display: none !important;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .logo-text {
+                font-size: 1.75rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .platform-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        /* Accessibility enhancements */
+        *:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Viktron Health</h1>
-        <p class="subtitle">Innovative AI-powered healthcare solutions</p>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <span style="font-size: 1.5rem;">⚕️</span>
+            </div>
+            <div class="logo-text">Viktron Health</div>
+        </div>
+        
+        <p class="tagline">Advanced Medical Technology Solutions for Cognitive Healthcare</p>
         
         <!-- Main domain content (platform selection) -->
         <div id="main-domain-content">
-            <div class="platform-links">
-                <div class="platform-card auraguide">
+            <h2 class="platform-title">
+                <span class="platform-title-icon">⚕️</span>
+                Our Healthcare Platforms
+            </h2>
+            
+            <div class="platforms-grid">
+                <!-- AuraGuide Platform -->
+                <div class="platform-card auraguide" id="auraguide-card">
                     <div class="platform-header">
-                        <div class="platform-icon">A</div>
+                        <div class="platform-icon-wrapper">
+                            <span class="platform-icon">👨‍⚕️</span>
+                        </div>
                         <div class="platform-info">
-                            <h3>AuraGuide</h3>
-                            <p>Caregiver support and guidance platform</p>
+                            <div class="platform-name">
+                                AuraGuide
+                                <span class="platform-badge">Caregiver Support</span>
+                            </div>
+                            <p class="platform-description">
+                                AI-powered guidance system designed to support caregivers with 
+                                real-time assistance, reducing burnout and improving patient care 
+                                quality through intelligent insights and recommendations.
+                            </p>
+                            <div class="platform-features">
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Real-time patient monitoring</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Medication management assistance</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Cognitive assessment tools</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Emergency response coordination</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="platform-footer">
-                        <a href="#" class="btn" id="auraguide-btn">Enter AuraGuide</a>
+                        <button class="platform-button auraguide-button" id="auraguide-btn">
+                            Access AuraGuide Platform
+                            <span class="arrow-icon">→</span>
+                        </button>
                     </div>
                 </div>
                 
-                <div class="platform-card aurapath">
+                <!-- AuraPath Platform -->
+                <div class="platform-card aurapath" id="aurapath-card">
                     <div class="platform-header">
-                        <div class="platform-icon">P</div>
+                        <div class="platform-icon-wrapper">
+                            <span class="platform-icon">🧠</span>
+                        </div>
                         <div class="platform-info">
-                            <h3>AuraPath</h3>
-                            <p>Patient care and memory prosthetic system</p>
+                            <div class="platform-name">
+                                AuraPath
+                                <span class="platform-badge">Memory Prosthetic</span>
+                            </div>
+                            <p class="platform-description">
+                                Revolutionary memory prosthetic system utilizing AI-enhanced 
+                                smart glasses to restore independence for individuals with 
+                                cognitive impairment through facial recognition and contextual 
+                                assistance.
+                            </p>
+                            <div class="platform-features">
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Zero-latency facial recognition</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Privacy-first local processing</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Haptic-guided navigation</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon"></span>
+                                    <span>Medication safety verification</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="platform-footer">
-                        <a href="#" class="btn" id="aurapath-btn">Enter AuraPath</a>
+                        <button class="platform-button aurapath-button" id="aurapath-btn">
+                            Access AuraPath Platform
+                            <span class="arrow-icon">→</span>
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="footer-note">
-                <p>Click the buttons above to access each platform directly</p>
-                <p class="redirecting" id="redirecting-msg">
-                    Redirecting<span class="loading-spinner"></span>
+            <div class="footer-section">
+                <div class="certification-badge">
+                    <span class="certification-icon">✓</span>
+                    HIPAA Compliant & ISO 13485 Certified
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Clinical Trials</a>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.8rem; color: #94a3b8;">
+                    © 2026 Viktron Health. All rights reserved. Medical Device Patent Pending.
                 </p>
             </div>
         </div>
         
         <!-- Subdomain content (when accessed via subdomain) -->
         <div id="subdomain-content" class="hidden">
-            <div class="platform-card" style="background: #f8f9fa; border: none;">
-                <div class="platform-header" style="background: #f8f9fa;">
-                    <div class="platform-icon" style="background: #95a5a6;">?</div>
-                    <div class="platform-info">
-                        <h3>Platform Access</h3>
-                        <p>You are accessing a Viktron Health subdomain. Please use the links below to navigate to the appropriate platform or return to the main site.</p>
+            <div class="platform-card" style="background: #f8f9fa; border: 1px solid var(--border-light); border-radius: 20px;">
+                <div class="platform-header" style="background: #f8f9fa; border-bottom: 1px solid var(--border-light); padding: 1.75rem;">
+                    <div class="platform-icon-wrapper" style="width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; background: rgba(148, 163, 184, 0.1);">
+                        <div class="platform-icon" style="width: 28px; height: 28px; font-size: 1.25rem; color: #64748b;">?</div>
+                    </div>
+                    <div class="platform-info" style="text-align: left;">
+                        <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-text); font-size: 1.25rem; font-weight: 600;">Platform Access</h3>
+                        <p style="margin: 0; color: var(--light-text); font-size: 0.95rem; line-height: 1.6;">
+                            You are accessing a Viktron Health subdomain. Please use the buttons above 
+                            to navigate to the appropriate healthcare platform or return to our main site 
+                            for more information about our medical technology solutions.
+                        </p>
                     </div>
                 </div>
-                <div class="platform-footer" style="justify-content: center;">
-                    <a href="https://viktronhealth.com" class="btn" style="background: #95a5a6; border-color: #95a5a6; color: white;">Visit Main Site</a>
+                <div class="platform-footer" style="padding: 1.75rem; border-top: 1px solid var(--border-light); background-color: #fafafa; display: flex; justify-content: center;">
+                    <a href="https://viktronhealth.com" class="platform-button" style="background: #64748b; color: white; border-radius: 12px; font-weight: 600; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem;">
+                        Return to Main Site
+                        <span class="arrow-icon">←</span>
+                    </a>
                 </div>
             </div>
+        </div>
+        
+        <!-- Loading container -->
+        <div id="loading-container" class="loading-container hidden">
+            <div class="loading-spinner"></div>
+            <p style="margin-top: 1rem; color: var(--light-text); font-size: 0.9rem;">Redirecting to platform...</p>
         </div>
     </div>
     
@@ -297,7 +607,7 @@
         const subdomainContent = document.getElementById('subdomain-content');
         const auraguideBtn = document.getElementById('auraguide-btn');
         const aurapathBtn = document.getElementById('aurapath-btn');
-        const redirectingMsg = document.getElementById('redirecting-msg');
+        const loadingContainer = document.getElementById('loading-container');
         
         // Function to handle redirects
         function handleRedirect() {
@@ -338,11 +648,13 @@
         }
         
         function redirectToPlatform(url) {
-            // Show redirecting message
-            redirectingMsg.classList.remove('hidden');
+            // Show loading state
+            loadingContainer.classList.remove('hidden');
             
-            // Redirect immediately for better UX
-            window.location.href = url;
+            // Redirect with slight delay to show loading state
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
         }
         
         // Run immediately on load
@@ -362,6 +674,18 @@
         // Handle popstate for back/forward navigation
         window.addEventListener('popstate', function() {
             setTimeout(handleRedirect, 0);
+        });
+        
+        // Add keyboard accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.activeElement === auraguideBtn) {
+                e.preventDefault();
+                auraguideBtn.click();
+            }
+            if (e.key === 'Enter' && document.activeElement === aurapathBtn) {
+                e.preventDefault();
+                aurapathBtn.click();
+            }
         });
     </script>
 </body>
