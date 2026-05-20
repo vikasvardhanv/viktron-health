@@ -1,104 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ArrowRight, Activity, ShieldAlert, Cpu, Heart, CheckCircle2, Navigation, Sparkles, AlertTriangle } from "lucide-react";
+import FlowArt, { FlowSection } from "./ui/story-scroll";
+import auraguideImg from "../assets/auragide.png";
+import aurapathGlassesImg from "../assets/aurapath_glasses.png";
 
 export default function PortalGate({ onNavigate }) {
   const containerRef = useRef(null);
-  const ambientGlowLimeRef = useRef(null);
-  const ambientGlowEmeraldRef = useRef(null);
-
-  useEffect(() => {
-    // GSAP Cinematic Entrance Timeline
-    const introTimeline = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-    // Initial States
-    gsap.set(".portal-title-area span", { y: 20, opacity: 0 });
-    gsap.set(".portal-title-area h1", { y: 30, opacity: 0, filter: "blur(5px)" });
-    gsap.set(".card-auraguide", { x: -80, opacity: 0, rotateY: -15 });
-    gsap.set(".card-aurapath", { x: 80, opacity: 0, rotateY: 15 });
-    gsap.set(".portal-img", { scale: 0.8, opacity: 0 });
-    gsap.set(".scroll-indicator", { y: 20, opacity: 0 });
-    gsap.set(".bento-card", { y: 30, opacity: 0 });
-
-    // Play Entrance
-    introTimeline
-      .to(".portal-title-area span", { y: 0, opacity: 1, duration: 0.8 })
-      .to(".portal-title-area h1", { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.0 }, "-=0.6")
-      .to([".card-auraguide", ".card-aurapath"], {
-        x: 0,
-        opacity: 1,
-        rotateY: 0,
-        duration: 1.5,
-        stagger: 0.15,
-        ease: "power3.out"
-      }, "-=0.8")
-      .to(".portal-img", {
-        scale: 1,
-        opacity: 1,
-        duration: 1.2,
-        stagger: 0.15,
-        ease: "back.out(1.5)"
-      }, "-=1.0")
-      .to(".scroll-indicator", { y: 0, opacity: 1, duration: 0.8 }, "-=0.5");
-
-    // Ambient floating image loop
-    gsap.to(".portal-img", {
-      y: -10,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Global cursor track for backlighting spotlights
-    const handleGlobalMouseMove = (e) => {
-      const { clientX: mouseX, clientY: mouseY } = e;
-
-      gsap.to(ambientGlowLimeRef.current, {
-        x: mouseX - window.innerWidth / 3,
-        y: mouseY - window.innerHeight / 3,
-        duration: 2.2,
-        ease: "power2.out"
-      });
-
-      gsap.to(ambientGlowEmeraldRef.current, {
-        x: mouseX - (window.innerWidth * 2) / 3,
-        y: mouseY - (window.innerHeight * 2) / 3,
-        duration: 2.2,
-        ease: "power2.out"
-      });
-    };
-
-    window.addEventListener("mousemove", handleGlobalMouseMove);
-
-    // Simple scroll reveal for bento grid
-    const handleScroll = () => {
-      const bentoGrid = document.querySelector(".bento-grid");
-      if (bentoGrid) {
-        const rect = bentoGrid.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.85) {
-          gsap.to(".bento-card", {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 1.0,
-            ease: "power3.out"
-          });
-          window.removeEventListener("scroll", handleScroll);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Trigger initially if already in view
-
-    return () => {
-      window.removeEventListener("mousemove", handleGlobalMouseMove);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   // Card cursor track tilt mechanics
-  const handleCardMouseMove = (e, cardClass) => {
+  const handleCardMouseMove = (e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -111,12 +23,12 @@ export default function PortalGate({ onNavigate }) {
     // Normalize coordinates (-0.5 to 0.5)
     const normX = x / rect.width - 0.5;
     const normY = y / rect.height - 0.5;
-    const maxTilt = 10;
+    const maxTilt = 8;
 
     gsap.to(card, {
       rotateX: -normY * maxTilt,
       rotateY: normX * maxTilt,
-      transformPerspective: 1200,
+      transformPerspective: 1000,
       ease: "power2.out",
       duration: 0.3
     });
@@ -124,9 +36,9 @@ export default function PortalGate({ onNavigate }) {
     const img = card.querySelector(".portal-img");
     if (img) {
       gsap.to(img, {
-        x: normX * 20,
-        y: normY * 20,
-        scale: 1.05,
+        x: normX * 15,
+        y: normY * 15,
+        scale: 1.04,
         ease: "power2.out",
         duration: 0.3
       });
@@ -154,171 +66,308 @@ export default function PortalGate({ onNavigate }) {
     }
   };
 
-  const handleScrollToBento = () => {
-    const bento = document.getElementById("innovation");
-    if (bento) {
-      window.scrollTo({
-        top: bento.offsetTop - 80,
-        behavior: "smooth"
-      });
-    }
-  };
-
   return (
-    <div ref={containerRef}>
-      {/* Background ambient spotlight glows */}
-      <div ref={ambientGlowLimeRef} className="ambient-glow glow-lime"></div>
-      <div ref={ambientGlowEmeraldRef} className="ambient-glow glow-emerald"></div>
+    <div ref={containerRef} className="w-full">
+      <FlowArt aria-label="Viktron Dementia Care Suite Gateway">
+        
+        {/* SLIDE 1: Cinematic Gateway Hero */}
+        <FlowSection aria-label="Viktron Gateway" style={{ backgroundColor: "#040603", color: "#F2F5F0" }}>
+          <div className="flex flex-col h-full justify-between py-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--accent-lime)] text-xs font-bold uppercase tracking-[0.25em]">
+                01 — Precision Care Suite
+              </span>
+              <span className="system-status text-[0.7rem] px-3 py-1 rounded-full border border-[rgba(217,228,181,0.15)] flex items-center gap-2">
+                <span className="status-dot"></span> SECURE EDGE CORE
+              </span>
+            </div>
 
-      <main className="portal-wrapper">
-        <div className="portal-title-area">
-          <span>Dementia Care AI Suite</span>
-          <h1>Precision Intelligence.<br />Restoring Dignity.</h1>
-        </div>
+            <div className="my-auto max-w-4xl">
+              <h1 className="text-[clamp(2.5rem,7vw,5.5rem)] font-extrabold leading-[0.9] uppercase tracking-tight text-white">
+                Precision
+                <br />
+                Intelligence.
+                <br />
+                <span className="text-[var(--accent-lime)] drop-shadow-[0_0_20px_rgba(217,228,181,0.12)]">Restoring Dignity.</span>
+              </h1>
+              <div className="my-[3vh] w-24 h-[1px] bg-[var(--accent-lime)] opacity-60"></div>
+              <p className="max-w-[65ch] text-[clamp(1rem,1.8vw,1.35rem)] font-normal leading-relaxed text-[var(--text-muted)]">
+                Viktron Health introduces a new paradigm in neurological care. By blending agentic clinical AI co-pilots with wearable memory prosthetics, we preserve cognitive agency, support caregivers, and guide bedside diagnostics.
+              </p>
+            </div>
 
-        {/* Product selector selector */}
-        <div className="portal-container">
-          
-          {/* AuraGuide Card */}
-          <div 
-            className="portal-card card-auraguide"
-            onMouseMove={(e) => handleCardMouseMove(e, "auraguide")}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <div className="card-top">
-              <span className="card-tag">Clinical Intelligence</span>
-              <h2>AURAGUIDE</h2>
-              <p>The world's first agentic clinical co-pilot. AuraGuide transforms fragmented patient data into actionable bedside intelligence.</p>
-              <div className="specs-row">
-                <span className="spec-pill">On-Device NPU</span>
-                <span className="spec-pill">Epic/Cerner Integration</span>
-                <span className="spec-pill">HL7 FHIR Sync</span>
+            <div className="flex items-center gap-3 mt-auto cursor-pointer animate-pulse text-[rgba(242,245,240,0.5)] hover:text-white transition-colors duration-300">
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">Scroll to explore technology</span>
+              <ArrowRight size={14} className="rotate-90" />
+            </div>
+          </div>
+        </FlowSection>
+
+        {/* SLIDE 2: AuraGuide Co-pilot */}
+        <FlowSection aria-label="AuraGuide Clinical Copilot" style={{ backgroundColor: "#070c04", color: "#F2F5F0" }}>
+          <div className="flex flex-col h-full justify-between py-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--accent-lime)] text-xs font-bold uppercase tracking-[0.25em]">
+                02 — Clinical Copilot
+              </span>
+              <span className="system-status text-[0.7rem] px-3 py-1 rounded-full border border-[rgba(217,228,181,0.15)] flex items-center gap-2">
+                <span className="status-dot"></span> HL7 FHIR SYNC
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto items-center">
+              <div className="lg:col-span-7 max-w-2xl">
+                <span className="card-tag">AuraGuide Suite</span>
+                <h1 className="text-[clamp(2.5rem,6vw,4.8rem)] font-extrabold leading-[0.9] uppercase tracking-tight text-white my-3">
+                  AuraGuide
+                  <br />
+                  Clinical AI
+                </h1>
+                <p className="text-[clamp(0.95rem,1.5vw,1.1rem)] leading-relaxed text-[var(--text-muted)] mb-6">
+                  The world's first agentic bedside co-pilot. AuraGuide securely links fragmented EPIC and Cerner patient vitals with local, zero-latency NPU edge computing, serving up clinical diagnostics in real-time.
+                </p>
+
+                <div className="specs-row mb-8">
+                  <span className="spec-pill">On-Device NPU Execution</span>
+                  <span className="spec-pill">Epic/Cerner FHIR Link</span>
+                  <span className="spec-pill">Biometric Pulse Analytics</span>
+                </div>
+
+                <div className="portal-cta-group">
+                  <button 
+                    className="card-explore-btn hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                    onClick={() => onNavigate("auraguide")}
+                  >
+                    Explore Dashboard Terminal
+                  </button>
+                  <a 
+                    href="https://auraguide.viktronhealth.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="portal-cta flex items-center justify-center bg-white text-black hover:bg-[var(--accent-lime)] hover:text-black w-11 h-11 rounded-full transition-all duration-300"
+                    title="Redirect to auraguide.viktronhealth.com"
+                  >
+                    <ArrowRight size={18} className="-rotate-45" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 flex justify-center">
+                <div 
+                  className="portal-card w-full max-w-[400px] h-[360px] flex flex-col justify-center items-center rounded-2xl bg-[var(--bg-card)] border border-[rgba(255,255,255,0.06)] shadow-2xl relative overflow-hidden"
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                >
+                  <div className="card-image-box">
+                    <img src={auraguideImg} alt="AuraGuide Hub" className="portal-img max-h-[220px]" />
+                  </div>
+                  <div className="absolute bottom-4 left-6 right-6 flex justify-between items-center z-10">
+                    <span className="text-[0.65rem] uppercase tracking-wider text-neutral-400">Clinical Node</span>
+                    <span className="text-xs font-semibold text-white">Hub-V3.1</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="card-image-box">
-              <img src="assets/auragide.png" alt="AuraGuide Clinical Copilot" className="portal-img" />
+            <div className="flex items-center gap-3 mt-auto text-[rgba(242,245,240,0.5)]">
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">Scroll to see AuraPath</span>
+              <ArrowRight size={14} className="rotate-90" />
+            </div>
+          </div>
+        </FlowSection>
+
+        {/* SLIDE 3: AuraPath Smart Glasses HUD */}
+        <FlowSection aria-label="AuraPath Smart Glasses" style={{ backgroundColor: "#030a0d", color: "#F2F5F0" }}>
+          <div className="flex flex-col h-full justify-between py-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--accent-cyan)] text-xs font-bold uppercase tracking-[0.25em]">
+                03 — Memory Prosthetic
+              </span>
+              <span className="system-status text-[0.7rem] px-3 py-1 rounded-full border border-[rgba(157,226,236,0.15)] flex items-center gap-2 text-[var(--accent-cyan)]">
+                <span className="status-dot" style={{ backgroundColor: "#9de2ec", boxShadow: "0 0 10px #9de2ec" }}></span> BLE SYNC ACTIVE
+              </span>
             </div>
 
-            <div className="card-bottom">
-              <div className="card-details">
-                <span className="detail-label">Deployment</span>
-                <span className="detail-value">Clinical Hub v3.1</span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto items-center">
+              <div className="lg:col-span-7 max-w-2xl">
+                <span className="card-tag" style={{ color: "var(--accent-cyan)" }}>AuraPath Wearables</span>
+                <h1 className="text-[clamp(2.5rem,6vw,4.8rem)] font-extrabold leading-[0.9] uppercase tracking-tight text-white my-3">
+                  AuraPath
+                  <br />
+                  Smart Glasses
+                </h1>
+                <p className="text-[clamp(0.95rem,1.5vw,1.1rem)] leading-relaxed text-[var(--text-muted)] mb-6">
+                  A revolutionary lightweight social prosthetic for memory assistance. AuraPath smart glasses instantly recall names (&lt;0.4s), whisper relationships via bone conduction, scan medication packets, and deliver guided spatial orientation.
+                </p>
+
+                <div className="specs-row mb-8">
+                  <span className="spec-pill">Face Vector Matching &lt;0.4s</span>
+                  <span className="spec-pill">Bone-Conduction Audio</span>
+                  <span className="spec-pill">Haptic Hazard Guidance</span>
+                </div>
+
+                <div className="portal-cta-group">
+                  <button 
+                    className="card-explore-btn hover:shadow-[0_0_20px_rgba(157,226,236,0.2)]"
+                    onClick={() => onNavigate("aurapath")}
+                    style={{ borderColor: "var(--accent-cyan)" }}
+                  >
+                    Explore HUD Glasses Feed
+                  </button>
+                  <a 
+                    href="https://aurapath.viktronhealth.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="portal-cta flex items-center justify-center bg-white text-black hover:bg-[var(--accent-cyan)] hover:text-black w-11 h-11 rounded-full transition-all duration-300"
+                    title="Redirect to aurapath.viktronhealth.com"
+                  >
+                    <ArrowRight size={18} className="-rotate-45" />
+                  </a>
+                </div>
               </div>
-              <div className="portal-cta-group">
+
+              <div className="lg:col-span-5 flex justify-center">
+                <div 
+                  className="portal-card w-full max-w-[400px] h-[360px] flex flex-col justify-center items-center rounded-2xl bg-[var(--bg-card)] border border-[rgba(255,255,255,0.06)] shadow-2xl relative overflow-hidden"
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                >
+                  <div className="card-image-box">
+                    <img src={aurapathGlassesImg} alt="AuraPath Smart Glasses" className="portal-img max-h-[220px]" />
+                  </div>
+                  <div className="absolute bottom-4 left-6 right-6 flex justify-between items-center z-10">
+                    <span className="text-[0.65rem] uppercase tracking-wider text-neutral-400">Wearable Device</span>
+                    <span className="text-xs font-semibold text-white">Glass-G2</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-auto text-[rgba(242,245,240,0.5)]">
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">Scroll to see Security</span>
+              <ArrowRight size={14} className="rotate-90" />
+            </div>
+          </div>
+        </FlowSection>
+
+        {/* SLIDE 4: Bento Specifications (Technical Fabric) */}
+        <FlowSection aria-label="Technical Fabric" style={{ backgroundColor: "#091209", color: "#F2F5F0" }}>
+          <div className="flex flex-col h-full justify-between py-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--accent-lime)] text-xs font-bold uppercase tracking-[0.25em]">
+                04 — Technical Fabric
+              </span>
+              <span className="system-status text-[0.7rem] px-3 py-1 rounded-full border border-[rgba(217,228,181,0.15)] flex items-center gap-2">
+                <span className="status-dot"></span> ENCRYPTED BEDSIDE LAYER
+              </span>
+            </div>
+
+            <div className="my-auto">
+              <div className="mb-8">
+                <span className="card-tag">Absolute Patient Safety</span>
+                <h2 className="text-[clamp(2rem,4vw,3.5rem)] font-extrabold uppercase tracking-tight text-white mt-2">
+                  Dignity Engineered with Precision
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] hover:border-[rgba(217,228,181,0.15)] rounded-2xl p-6 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-lg bg-[rgba(217,228,181,0.06)] flex items-center justify-center text-[var(--accent-lime)] mb-4">
+                    <Sparkles size={20} />
+                  </div>
+                  <h3 className="text-base font-bold uppercase tracking-wider text-white mb-2">Social ID Core</h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                    Instantly identifies loved ones and friends, whispering names via haptic bone conduction to restore natural dialog flow.
+                  </p>
+                </div>
+
+                <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] hover:border-[rgba(217,228,181,0.15)] rounded-2xl p-6 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-lg bg-[rgba(217,228,181,0.06)] flex items-center justify-center text-[var(--accent-lime)] mb-4">
+                    <Cpu size={20} />
+                  </div>
+                  <h3 className="text-base font-bold uppercase tracking-wider text-white mb-2">Privacy-First AI</h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                    Zero cloud delays or risks. Facial vectors and logs process locally on secure offline neural processor units.
+                  </p>
+                </div>
+
+                <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] hover:border-[rgba(217,228,181,0.15)] rounded-2xl p-6 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-lg bg-[rgba(217,228,181,0.06)] flex items-center justify-center text-[var(--accent-lime)] mb-4">
+                    <CheckCircle2 size={20} />
+                  </div>
+                  <h3 className="text-base font-bold uppercase tracking-wider text-white mb-2">Prescription Checker</h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                    Real-time computer vision packaging scans cross-reference dosages to confirm correct medical adherence instantly.
+                  </p>
+                </div>
+
+                <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] hover:border-[rgba(217,228,181,0.15)] rounded-2xl p-6 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-lg bg-[rgba(217,228,181,0.06)] flex items-center justify-center text-[var(--accent-lime)] mb-4">
+                    <Navigation size={20} />
+                  </div>
+                  <h3 className="text-base font-bold uppercase tracking-wider text-white mb-2">Hazard Assist</h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                    Uses local geofencing and active haptic corridor guide core to safely steer disoriented patients back to safety limits.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-auto text-[rgba(242,245,240,0.5)]">
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">Scroll to get started</span>
+              <ArrowRight size={14} className="rotate-90" />
+            </div>
+          </div>
+        </FlowSection>
+
+        {/* SLIDE 5: Deploy the Dementia Care Revolution */}
+        <FlowSection aria-label="Join the Revolution" style={{ backgroundColor: "#000000", color: "#F2F5F0" }}>
+          <div className="flex flex-col h-full justify-between py-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--accent-lime)] text-xs font-bold uppercase tracking-[0.25em]">
+                05 — Deploy Suite
+              </span>
+              <span className="system-status text-[0.7rem] px-3 py-1 rounded-full border border-[rgba(217,228,181,0.15)] flex items-center gap-2">
+                <span className="status-dot"></span> CLINICAL INTAKE ACTIVE
+              </span>
+            </div>
+
+            <div className="my-auto max-w-3xl">
+              <h1 className="text-[clamp(2.5rem,7vw,5.5rem)] font-extrabold leading-[0.9] uppercase tracking-tight text-white">
+                Ready to
+                <br />
+                Begin the
+                <br />
+                <span className="text-[var(--accent-lime)] drop-shadow-[0_0_20px_rgba(217,228,181,0.12)]">Revolution?</span>
+              </h1>
+              <div className="my-[3vh] w-24 h-[1px] bg-[var(--accent-lime)] opacity-60"></div>
+              <p className="max-w-[60ch] text-[clamp(1rem,1.8vw,1.35rem)] font-normal leading-relaxed text-[var(--text-muted)] mb-8">
+                Partner with Viktron Health to establish high-fidelity cognitive assurance frameworks in your clinics, memory centers, and home care environments. Restore confidence and bedside security.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
                 <button 
-                  className="card-explore-btn" 
-                  onClick={() => onNavigate("auraguide")}
-                  aria-label="Explore AuraGuide Console"
+                  className="px-8 py-4 bg-[var(--accent-lime)] text-black text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(217,228,181,0.2)]"
+                  onClick={() => alert("Thank you for your interest! Intake forms are now open at clinical-intake@viktronhealth.com")}
                 >
-                  Explore Dashboard
+                  Request Clinical Pilot Deployment
                 </button>
-                <a 
-                  href="https://auraguide.viktronhealth.com" 
-                  target="_blank" 
-                  className="portal-cta" 
-                  rel="noopener noreferrer"
-                  aria-label="Redirect to auraguide.viktronhealth.com"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* AuraPath Card */}
-          <div 
-            className="portal-card card-aurapath"
-            onMouseMove={(e) => handleCardMouseMove(e, "aurapath")}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <div className="card-top">
-              <span className="card-tag">Memory Prosthetic</span>
-              <h2>AURAPATH</h2>
-              <p>A "Social Prosthetic" for dementia care. AuraPath glasses restore dignity and independence to those with memory loss.</p>
-              <div className="specs-row">
-                <span className="spec-pill">Face Recall &lt;0.4s</span>
-                <span className="spec-pill">Bone-Conduction Audio</span>
-                <span className="spec-pill">Haptic Guide Core</span>
-              </div>
-            </div>
-
-            <div className="card-image-box">
-              <img src="assets/aurapath_glasses.png" alt="AuraPath Smart Glasses" className="portal-img" />
-            </div>
-
-            <div className="card-bottom">
-              <div className="card-details">
-                <span className="detail-label">Hardware System</span>
-                <span className="detail-value">AuraGlass-G2</span>
-              </div>
-              <div className="portal-cta-group">
                 <button 
-                  className="card-explore-btn" 
-                  onClick={() => onNavigate("aurapath")}
-                  aria-label="Explore AuraPath Glasses Console"
+                  className="px-8 py-4 border border-[rgba(255,255,255,0.15)] hover:border-white text-white text-xs font-bold uppercase tracking-wider rounded-full transition-all duration-300"
+                  onClick={() => window.open("https://viktronhealth.com/research-papers", "_blank")}
                 >
-                  Explore Dashboard
+                  Read Research Papers
                 </button>
-                <a 
-                  href="https://aurapath.viktronhealth.com" 
-                  target="_blank" 
-                  className="portal-cta" 
-                  rel="noopener noreferrer"
-                  aria-label="Redirect to aurapath.viktronhealth.com"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
               </div>
             </div>
-          </div>
 
-        </div>
+            <div className="mt-auto text-xs text-[var(--text-muted)] tracking-wider">
+              © {new Date().getFullYear()} Viktron Health Inc. All rights reserved.
+            </div>
+          </div>
+        </FlowSection>
 
-        {/* Scroll down indicator */}
-        <div className="scroll-indicator" onClick={handleScrollToBento}>
-          <span>Explore Innovation</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </div>
-      </main>
-
-      {/* Bento specifications */}
-      <section className="bento-section" id="innovation">
-        <div className="bento-header">
-          <span>Technical Fabric</span>
-          <h2>Architected for Absolute Safety</h2>
-        </div>
-
-        <div className="bento-grid">
-          <div className="bento-card bento-large">
-            <h3>Social Identification Engine</h3>
-            <p>Instantly identifies family and friends, whispering their names and relationships via bone-conduction audio. Restores identity and natural conversational flow without screens or social friction.</p>
-          </div>
-          
-          <div className="bento-card">
-            <h3>Privacy-First Local AI</h3>
-            <p>Zero cloud latency. All audio descriptions and facial vectors are processed entirely on-device via a secure offline neural processor unit, offering complete data privacy.</p>
-          </div>
-          
-          <div className="bento-card">
-            <h3>Label Verification Core</h3>
-            <p>Advanced real-time computer vision scans medication packaging and details. Runs instant edge checks to cross-reference prescriptions and verify correct dosages.</p>
-          </div>
-          
-          <div className="bento-card bento-large">
-            <h3>Autonomous Safe Navigation</h3>
-            <p>Seamless spatial intelligence uses edge geofencing and active haptics to gently guide patients back home if disorientation occurs, alerting designated clinicians and caregivers instantly.</p>
-          </div>
-        </div>
-      </section>
+      </FlowArt>
     </div>
   );
 }
