@@ -1,0 +1,10 @@
+# Redirects for auraguide and aurapath subdomains
+# Netlify _redirects file
+
+# Redirect auraguide subdomain to auraguide.viktronhealth.com
+http://auraguide/*  https://auraguide.viktronhealth.com/:splat  301!
+https://auraguide/*  https://auraguide.viktronhealth.com/:splat  301!
+
+# Redirect aurapath subdomain to aurapath.viktronhealth.com
+http://aurapath/*  https://aurapath.viktronhealth.com/:splat  301!
+https://aurapath/*  https://aurapath.viktronhealth.com/:splat  301!

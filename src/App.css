@@ -1,16 +1,549 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+:root {
+  /* Medical Tech Company Color Scheme */
+  --primary-blue: #2563eb;
+  --secondary-blue: #1d4ed8;
+  --accent-teal: #0d9488;
+  --light-blue: #eff6ff;
+  --success-green: #10b981;
+  --warning-amber: #f59e0b;
+  --dark-text: #1e293b;
+  --light-text: #64748b;
+  --border-light: #e2e8f0;
+  --background-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  --card-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+  --transition-speed: 0.3s;
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+}
 
-  &:hover {
-    border-color: var(--accent-border);
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--background-gradient);
+  min-height: 100vh;
+  color: var(--dark-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Container for centering content */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Medical tech specific components */
+.medical-tech-container {
+  display: grid;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .medical-tech-container {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.medical-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.medical-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-blue);
+}
+
+.medical-card.medical-primary:hover {
+  border-color: var(--primary-blue);
+}
+
+.medical-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.medical-card:hover::before {
+  opacity: 1;
+}
+
+.medical-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.auraguide .medical-icon-wrapper {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.aurapath .medical-icon-wrapper {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.medical-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 1.25rem;
+}
+
+.auraguide .medical-icon {
+  color: var(--primary-blue);
+}
+
+.aurapath .medical-icon {
+  color: var(--success-green);
+}
+
+.medical-content {
+  text-align: left;
+  padding: 0 1.75rem 1.5rem;
+}
+
+.medical-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.medical-content .subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-blue);
+  margin-bottom: 1rem;
+}
+
+.medical-content .description {
+  color: var(--light-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.medical-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--light-text);
+}
+
+.feature-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.auraguide .feature-icon {
+  color: var(--primary-blue);
+}
+
+.aurapath .feature-icon {
+  color: var(--success-green);
+}
+
+.feature-icon::before {
+  content: '•';
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.medical-footer {
+  padding: 1.5rem 1.75rem;
+  border-top: 1px solid var(--border-light);
+  background-color: #fafafa;
+}
+
+.cta-text {
+  font-weight: 600;
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.cta-text:hover {
+  color: var(--secondary-blue);
+  text-decoration: underline;
+}
+
+/* Bento section styles */
+.bento-section {
+  margin: 3rem 0;
+  padding: 0 1rem;
+}
+
+.bento-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.bento-header span {
+  background: var(--light-blue);
+  color: var(--primary-blue);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.bento-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.bento-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bento-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-speed) ease;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-blue);
+}
+
+.bento-card.bento-large {
+  grid-column: span 2;
+}
+
+@media (min-width: 1024px) {
+  .bento-card.bento-large {
+    grid-column: auto;
+  }
+}
+
+.bento-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-bottom: 1rem;
+}
+
+.bento-card p {
+  color: var(--light-text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Portal specific styles */
+.portal-wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+.portal-title-area {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.portal-title-area span {
+  display: block;
+  font-size: 1.125rem;
+  color: var(--light-text);
+  margin-bottom: 0.5rem;
+}
+
+.portal-title-area h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--dark-text);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.scroll-indicator {
+  margin: 3rem auto;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  width: fit-content;
+}
+
+.scroll-indicator:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.scroll-indicator span {
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.scroll-indicator svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--primary-blue);
+}
+
+/* Ambient glows */
+.ambient-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.glow-lime {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(50px);
+}
+
+.glow-emerald {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(50px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .portal-title-area h1 {
+    font-size: 2rem;
+  }
+  
+  .medical-content h2 {
+    font-size: 1.25rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .scroll-indicator {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+/* Override any existing styles */
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.1;
+}
+
+.grid-overlay::before,
+.grid-overlay::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+nav .logo span {
+  color: var(--secondary-blue);
+}
+
+nav .nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+nav .nav-links button {
+  background: none;
+  border: none;
+  color: var(--light-text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
+}
+
+nav .nav-links button:hover {
+  color: var(--primary-blue);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+nav .nav-links button[style*="opacity: 1"] {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+nav .system-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--light-text);
+}
+
+nav .status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success-green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+footer {
+  margin-top: 4rem;
+  padding: 2rem;
+  border-top: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-logo span {
+  color: var(--secondary-blue);
+}
+
+.footer-copy {
+  color: var(--light-text);
+  font-size: 0.875rem;
+}
+
+/* Ensure main.jsx renders properly */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
   &:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
