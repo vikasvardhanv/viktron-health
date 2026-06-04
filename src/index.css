@@ -1,53 +1,385 @@
 @import "tailwindcss";
 
 @theme {
-  --color-obsidian: #0D0D12;
-  --color-ivory: #FAF8F5;
-  --color-champagne: #C9A84C;
-  --color-slate: #2A2A35;
-  --font-inter: 'Inter', sans-serif;
-  --font-playfair: 'Playfair Display', serif;
-  --font-jetbrains: 'JetBrains Mono', monospace;
+  --color-background: #FDFCFB;
+  --color-surface: #FFFFFF;
+  --color-foreground: #09090B;
+  --color-muted: #F4F4F5;
+  --color-muted-foreground: #71717A;
+  --color-border: #E4E4E7;
+  --color-accent: #FF5A36;
+
+  --font-display: 'Instrument Serif', serif;
+  --font-sans: 'Outfit', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 }
 
-@layer base {
-  body {
-    @apply bg-[var(--color-obsidian)] text-[var(--color-ivory)] antialiased font-inter overflow-x-hidden;
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: auto; /* GSAP handles smoothness */
+}
+
+.noise {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.bento-card {
+  @apply bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[24px] overflow-hidden relative shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-500 ease-out;
+}
+
+.inline-image-pill {
+  @apply inline-flex items-center justify-center align-middle mx-2 rounded-full overflow-hidden border border-[var(--color-border)];
+  height: 0.85em;
+  width: 2.2em;
+  transform: translateY(-0.1em);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HERO VIDEO SECTION — Full-bleed looping background with
+   inward radial mask. Text has strong contrast for readability.
+   ════════════════════════════════════════════════════════════════ */
+
+.hero-video-section {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-background);
+}
+
+.hero-video-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-video--loaded {
+  opacity: 0.25; /* Keep video dim so text pops */
+}
+
+/* Inward masking gradient */
+.hero-mask-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--color-background) 0%, transparent 15%),
+    linear-gradient(to top, var(--color-background) 0%, transparent 20%),
+    linear-gradient(to right, var(--color-background) 0%, transparent 12%),
+    linear-gradient(to left, var(--color-background) 0%, transparent 12%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, transparent 25%, var(--color-background) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 900px;
+  padding: 6rem 1.5rem 4rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+  margin-bottom: 2.5rem;
+}
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--color-foreground);
+  margin-bottom: 2rem;
+  text-shadow:
+    0 0 40px rgba(253, 252, 251, 0.9),
+    0 0 80px rgba(253, 252, 251, 0.6),
+    0 2px 4px rgba(253, 252, 251, 0.4);
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  color: var(--color-muted-foreground);
+  max-width: 560px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 2.5rem;
+  text-shadow:
+    0 0 30px rgba(253, 252, 251, 0.8),
+    0 0 60px rgba(253, 252, 251, 0.5);
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-foreground);
+  color: var(--color-surface);
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  transform: active-scale(0.95);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.hero-cta:hover {
+  background: var(--color-foreground)/0.9;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SCROLL-DRIVEN EXPLODED VIEW SECTION
+   Must NOT be inside a flex container — GSAP pin-spacer math
+   requires normal document flow. Width: 100%, height: 100vh,
+   no negative margins or 100vw breakouts.
+   ════════════════════════════════════════════════════════════════ */
+
+.scroll-scrub-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #09090B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-scrub-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* test101.mp4 has a light gray background — blend it into the dark section */
+  opacity: 0.45;
+  filter: brightness(0.6) contrast(1.4) saturate(0.3);
+}
+
+/* Inward mask for the scrub section — darker edges to focus on center */
+.scroll-scrub-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, #09090B 0%, transparent 12%),
+    linear-gradient(to top, #09090B 0%, transparent 15%),
+    linear-gradient(to right, #09090B 0%, transparent 8%),
+    linear-gradient(to left, #09090B 0%, transparent 8%),
+    radial-gradient(ellipse 60% 55% at 50% 50%, transparent 10%, #09090B 100%);
+}
+
+/* SVG overlay for callout lines and dots */
+.scroll-labels-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* HTML-based callout labels — crisp text rendering */
+.scroll-part-label {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.scroll-part-label-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: #FDFCFB;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 0 12px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+
+.scroll-part-label-desc {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--color-accent);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+
+/* Text block that rives through the scrub section */
+.scroll-text-block {
+  position: absolute;
+  z-index: 5;
+  max-width: 680px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  will-change: transform, opacity;
+  opacity: 0;
+}
+
+.scroll-text-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 9999px;
+  margin-bottom: 0.5rem;
+}
+
+.scroll-text-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #FDFCFB;
+  text-shadow:
+    0 0 40px rgba(9, 9, 11, 0.8),
+    0 0 80px rgba(9, 9, 11, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-text-body {
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  line-height: 1.7;
+  color: rgba(253, 252, 251, 0.75);
+  font-weight: 300;
+  max-width: 520px;
+  text-shadow:
+    0 0 20px rgba(9, 9, 11, 0.6),
+    0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Scroll hint arrow */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(253, 252, 251, 0.4);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: scrollHintPulse 2.5s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FEATURE SECTION — standard bento grid below the scroll animation
+   ════════════════════════════════════════════════════════════════ */
+
+.feature-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 6rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .feature-section {
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 }
 
-@layer utilities {
-  .noise-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 50;
-    opacity: 0.05;
-    background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-  }
+.feature-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  max-width: 48rem;
+  color: var(--color-foreground);
+}
 
-  .text-drama {
-    @apply font-playfair italic;
-  }
-  
-  .text-data {
-    @apply font-jetbrains uppercase tracking-widest text-[0.7rem];
-  }
+/* ════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ════════════════════════════════════════════════════════════════ */
 
-  .btn-magnetic {
-    @apply relative overflow-hidden transition-all duration-300 transform rounded-full inline-flex items-center justify-center;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
-  .btn-magnetic:hover {
-    transform: scale(1.03) translateY(-1px);
+@keyframes scrollHintPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateX(-50%) translateY(0);
   }
-
-  .btn-sliding-bg {
-    @apply absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300 ease-out;
-  }
-
-  .btn-magnetic:hover .btn-sliding-bg {
-    @apply translate-y-0;
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) translateY(6px);
   }
 }
