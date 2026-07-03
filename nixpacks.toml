@@ -1,2 +1,9 @@
 [phases.setup]
 nixpkgsArchive = "50165c4f7eb48ce82bd063e1fb8047a0f515f8ce"
+nixPkgs = ["caddy"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "caddy run --config /app/Caddyfile --adapter caddyfile"
