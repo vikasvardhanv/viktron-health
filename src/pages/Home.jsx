@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
@@ -243,6 +243,10 @@ export default function Home() {
             <div className="hero-reveal hero-badge">
               <span className="hero-badge-dot" />
               Clinical Edge Inference
+            </div>
+
+            <div className="flex justify-center mb-6">
+              <img src="/viktron-health-logo.png" alt="Viktron Health" className="w-16 h-16 object-contain hero-reveal" />
             </div>
 
             <h1 className="hero-reveal hero-headline">

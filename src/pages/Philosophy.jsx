@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -14,6 +14,7 @@ export default function Philosophy() {
 
   return (
     <div ref={container} className="flex flex-col items-center justify-center min-h-[70vh] text-center max-w-4xl mx-auto">
+      <img src="/viktron-health-logo.png" alt="Viktron Health" className="w-10 h-10 object-contain mb-8 phil-reveal" />
       <h2 className="phil-reveal font-sans text-xl md:text-2xl text-[var(--color-muted-foreground)] font-light leading-relaxed mb-8">
         Most memory care tech focuses on passive tracking and containment.
       </h2>

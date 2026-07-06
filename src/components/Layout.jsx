@@ -37,9 +37,7 @@ function Navbar() {
     <header className="fixed top-0 left-0 w-full z-40 bg-[var(--color-background)]/80 backdrop-blur-md border-b border-[var(--color-border)]">
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <svg viewBox="0 0 24 24" className="w-7 h-7 text-[var(--color-foreground)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
-             <path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" fillOpacity="0.1"/>
-          </svg>
+          <img src="/viktron-health-logo.png" alt="Viktron Health" className="w-8 h-8 object-contain group-hover:opacity-80 transition-opacity" />
           <span className="font-medium tracking-tight text-xl">Viktron</span>
         </Link>
         <nav className="hidden md:flex items-center gap-10 text-sm font-medium text-[var(--color-muted-foreground)]">
@@ -61,9 +59,7 @@ function Footer() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start gap-12">
         <div className="max-w-sm">
           <Link to="/" className="flex items-center gap-3 mb-6">
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-[var(--color-accent)]">
-               <path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-            </svg>
+            <img src="/viktron-health-logo.png" alt="Viktron Health" className="w-6 h-6 object-contain" />
             <span className="font-medium tracking-tight text-lg">ViktronHealth</span>
           </Link>
           <p className="text-sm text-[var(--color-muted-foreground)] leading-relaxed">

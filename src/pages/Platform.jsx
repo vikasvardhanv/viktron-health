@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -17,7 +17,8 @@ export default function Platform() {
 
   return (
     <div ref={container} className="flex flex-col gap-32">
-      <div className="max-w-4xl pt-12">
+      <div className="max-w-4xl pt-12 flex flex-col items-center text-center">
+        <img src="/viktron-health-logo.png" alt="Viktron Health" className="w-12 h-12 object-contain mb-6 plat-reveal" />
         <h1 className="plat-reveal font-display text-5xl md:text-[5rem] tracking-tight leading-[0.95] mb-6 text-[var(--color-foreground)]">
           The Care Ecosystem
         </h1>
@@ -29,8 +30,13 @@ export default function Platform() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="plat-reveal bento-card p-10 min-h-[600px] flex flex-col justify-between group">
           <div>
-            <div className="w-12 h-12 rounded-full border border-[var(--color-border)] flex items-center justify-center mb-8">
-              <span className="font-mono text-xs">01</span>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-16 h-16 rounded-2xl border border-[var(--color-border)] flex items-center justify-center bg-[var(--color-muted)]">
+                <img src="/viktron-health-logo.png" alt="AuraPath" className="w-10 h-10 object-contain" />
+              </div>
+              <div className="w-12 h-12 rounded-full border border-[var(--color-border)] flex items-center justify-center">
+                <span className="font-mono text-xs">01</span>
+              </div>
             </div>
             <h2 className="font-display text-4xl mb-4">AuraPath Smart Glasses</h2>
             <p className="text-[var(--color-muted-foreground)] mb-8 leading-relaxed">
@@ -54,8 +60,13 @@ export default function Platform() {
 
         <div className="plat-reveal bento-card p-10 min-h-[600px] flex flex-col justify-between group">
           <div>
-            <div className="w-12 h-12 rounded-full border border-[var(--color-border)] flex items-center justify-center mb-8">
-              <span className="font-mono text-xs">02</span>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-16 h-16 rounded-2xl border border-[var(--color-border)] flex items-center justify-center bg-[var(--color-muted)]">
+                <img src="/viktron-health-logo.png" alt="AuraGuide" className="w-10 h-10 object-contain" />
+              </div>
+              <div className="w-12 h-12 rounded-full border border-[var(--color-border)] flex items-center justify-center">
+                <span className="font-mono text-xs">02</span>
+              </div>
             </div>
             <h2 className="font-display text-4xl mb-4">AuraGuide Copilot</h2>
             <p className="text-[var(--color-muted-foreground)] mb-8 leading-relaxed">
