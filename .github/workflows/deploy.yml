@@ -1,0 +1,33 @@
+name: Deploy to Coolify
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-coolify
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+      COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+      # Coolify application uuid for viktronhealth.com
+      APP_UUID: k3vr858os832gkgavcttg3ay
+    steps:
+      - name: Require secrets
+        run: |
+          [ -n "$COOLIFY_URL" ] || { echo "::error::Missing secret COOLIFY_URL"; exit 1; }
+          [ -n "$COOLIFY_TOKEN" ] || { echo "::error::Missing secret COOLIFY_TOKEN"; exit 1; }
+
+      - name: Trigger Coolify deploy
+        run: |
+          code=$(curl -sS -o resp.json -w '%{http_code}' \
+            -H "Authorization: Bearer $COOLIFY_TOKEN" \
+            "${COOLIFY_URL%/}/api/v1/deploy?uuid=$APP_UUID&force=false")
+          echo "Coolify responded HTTP $code"
+          cat resp.json
+          [ "$code" -ge 200 ] && [ "$code" -lt 300 ]
