@@ -25,7 +25,7 @@ jobs:
 
       - name: Trigger Coolify deploy
         run: |
-          code=$(curl -sS -o resp.json -w '%{http_code}' \
+          code=$(curl -sS -X POST -o resp.json -w '%{http_code}' \
             -H "Authorization: Bearer $COOLIFY_TOKEN" \
             "${COOLIFY_URL%/}/api/v1/deploy?uuid=$APP_UUID&force=false")
           echo "Coolify responded HTTP $code"
