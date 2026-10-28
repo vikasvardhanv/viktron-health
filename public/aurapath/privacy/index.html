@@ -23,7 +23,7 @@ nav{border-bottom:1px solid var(--line);padding:.9rem 1.25rem}nav a{margin-right
 <li><strong>Voice audio.</strong> While a voice session is active, the microphone audio goes to the voice service so Aura can answer. The app does not listen when no session is active.</li>
 <li><strong>People you save.</strong> Name, relationship, optional notes, and a reference photo for each person you ask Aura to remember.</li>
 <li><strong>Identification history.</strong> The label, description, and time of each identification.</li>
-<li><strong>Reminders.</strong> The text and time of each reminder you set.</li>
+<li><strong>Reminders.</strong> The text and time of each reminder you set. Each one is a notification on your phone at its time. AuraPath asks before turning on notifications.</li>
 <li><strong>Emergency contact and settings.</strong> The contact name and phone number you enter, and your choices such as Whisper Mode and Calm Mode.</li>
 <li><strong>Glasses status.</strong> Device name, battery level, and media counts. Bluetooth is used only to talk to your glasses.</li>
 <li><strong>Account information.</strong> Your name, and your email address if you create an account.</li>
@@ -37,6 +37,7 @@ nav{border-bottom:1px solid var(--line);padding:.9rem 1.25rem}nav a{margin-right
 <ul>
 <li><strong>Viktron Health AI servers.</strong> Photos and voice audio are processed on servers that Viktron Health operates. We do not send them to a third-party AI company. The servers delete the photo and audio after they reply. A photo is kept only when the app saves it to your identification history.</li>
 <li><strong>Supabase.</strong> Our database and file host. It stores your saved people, reference photos, identification history and its photos, reminders, and settings. Access rules limit each record to its owner.</li>
+<li><strong>Google ML Kit.</strong> The app uses Google&rsquo;s on-device ML Kit to find faces and label objects on your phone. Photos stay on the phone for this. ML Kit sends Google anonymous usage and performance data about the SDK itself, not your photos.</li>
 <li><strong>Your emergency contact.</strong> The app opens your phone&rsquo;s call or message screen. The app does not send a message by itself. You or a caregiver must tap Send.</li>
 </ul>
 <p>If you turn on on-device mode and download the on-device model, image identification can run on the phone without sending the photo to our servers.</p>
