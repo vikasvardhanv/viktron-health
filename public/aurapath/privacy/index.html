@@ -14,7 +14,7 @@ nav{border-bottom:1px solid var(--line);padding:.9rem 1.25rem}nav a{margin-right
 <nav><a href="/aurapath/privacy">Privacy</a><a href="/aurapath/support">Support</a></nav>
 <main>
 <h1>AuraPath Privacy Policy</h1>
-<p class="mut">Effective date: October 27, 2026 &middot; Operated by Viktron Health</p>
+<p class="mut">Effective date: October 28, 2026 &middot; Operated by Viktron Health</p>
 <p>AuraPath is a smart-glasses companion app. It helps a person recognize familiar people, understand their surroundings, and get reminders by voice. This policy explains what the app collects, who receives it, and the choices you have.</p>
 
 <h2>1. What AuraPath collects</h2>
@@ -23,10 +23,11 @@ nav{border-bottom:1px solid var(--line);padding:.9rem 1.25rem}nav a{margin-right
 <li><strong>Voice audio.</strong> While a voice session is active, the microphone audio goes to the voice service so Aura can answer. The app does not listen when no session is active.</li>
 <li><strong>People you save.</strong> Name, relationship, optional notes, and a reference photo for each person you ask Aura to remember.</li>
 <li><strong>Identification history.</strong> The label, description, and time of each identification.</li>
-<li><strong>Reminders.</strong> The text and time of each reminder you set.</li>
+<li><strong>Reminders.</strong> The text and time of each reminder you set. Each one is a notification on your phone at its time. AuraPath asks before turning on notifications.</li>
 <li><strong>Emergency contact and settings.</strong> The contact name and phone number you enter, and your choices such as Whisper Mode and Calm Mode.</li>
 <li><strong>Glasses status.</strong> Device name, battery level, and media counts. Bluetooth is used only to talk to your glasses.</li>
 <li><strong>Account information.</strong> Your name, and your email address if you create an account.</li>
+<li><strong>Medicines from Medhavn.</strong> AuraPath and Medhavn share one account. AuraPath reads your Medhavn medicine list and dose records so a pill check can say whether a dose is due. When you confirm a dose in AuraPath, it records the dose in Medhavn.</li>
 </ul>
 
 <h2>2. How we use it</h2>
@@ -34,11 +35,12 @@ nav{border-bottom:1px solid var(--line);padding:.9rem 1.25rem}nav a{margin-right
 
 <h2>3. Who receives it</h2>
 <ul>
-<li><strong>Google (Gemini).</strong> Photos and voice audio are processed by Google&rsquo;s Gemini services to produce answers. Google&rsquo;s terms govern that processing.</li>
-<li><strong>Supabase.</strong> Our database and file host. It stores your saved people, reference photos, identification history, reminders, and settings. Access rules limit each record to its owner.</li>
+<li><strong>Viktron Health AI servers.</strong> Photos and voice audio are processed on servers that Viktron Health operates. We do not send them to a third-party AI company. The servers delete the photo and audio after they reply. A photo is kept only when the app saves it to your identification history.</li>
+<li><strong>Supabase.</strong> Our database and file host. It stores your saved people, reference photos, identification history and its photos, reminders, and settings. Access rules limit each record to its owner.</li>
+<li><strong>Google ML Kit.</strong> The app uses Google&rsquo;s on-device ML Kit to find faces and label objects on your phone. Photos stay on the phone for this. ML Kit sends Google anonymous usage and performance data about the SDK itself, not your photos.</li>
 <li><strong>Your emergency contact.</strong> The app opens your phone&rsquo;s call or message screen. The app does not send a message by itself. You or a caregiver must tap Send.</li>
 </ul>
-<p>If you turn on on-device mode and download the on-device model, image identification can run on the phone without sending the photo to Google.</p>
+<p>If you turn on on-device mode and download the on-device model, image identification can run on the phone without sending the photo to our servers.</p>
 
 <h2>4. Face recognition</h2>
 <p>AuraPath compares a new photo with the reference photos you saved. It does this only for people you chose to add. It does not search for strangers and does not build a public database.</p>
@@ -48,11 +50,11 @@ nav{border-bottom:1px solid var(--line);padding:.9rem 1.25rem}nav a{margin-right
 <li>Turn off cloud backup of known people in Settings.</li>
 <li>Choose whether transcripts are stored, and whether names are removed from exports.</li>
 <li>Remove any saved person from the People screen.</li>
-<li>Ask us to delete your account and all stored data by emailing the address below. We will act on a verified request.</li>
+<li>Delete your account and all stored data in the app: Settings &rsaquo; Delete account. This also deletes your Medhavn account, because the two apps share one login. You can also email the address below.</li>
 </ul>
 
 <h2>6. Retention and security</h2>
-<p>We keep your data until you delete it or ask us to delete your account. Data is sent over encrypted connections. No system is perfectly secure, so we cannot guarantee absolute security.</p>
+<p>We keep your data until you delete it or delete your account. Data is sent over encrypted connections. No system is perfectly secure, so we cannot guarantee absolute security.</p>
 
 <h2>7. Health information</h2>
 <p>AuraPath is a memory-support companion. It is not a medical device. It does not diagnose, treat, or monitor any condition. Do not rely on it in an emergency. Call your local emergency number.</p>
