@@ -13,7 +13,7 @@ const HARDWARE_PARTS = [
     color: "var(--color-mint)",
     dotX: "64%",
     dotY: "38%",
-    video: "/hardware_optics.mp4",
+    video: "/hardware_optics.mp4?v=10",
     badge: "Diffractive Micro-Waveguide"
   },
   {
@@ -27,7 +27,7 @@ const HARDWARE_PARTS = [
     color: "var(--color-clay)",
     dotX: "34%",
     dotY: "60%",
-    video: "/hardware_npu.mp4",
+    video: "/hardware_npu.mp4?v=10",
     badge: "26 TOPS Neural Silicon"
   },
   {
@@ -41,7 +41,7 @@ const HARDWARE_PARTS = [
     color: "var(--color-teal)",
     dotX: "62%",
     dotY: "66%",
-    video: "/hardware_sensors.mp4",
+    video: "/hardware_sensors.mp4?v=10",
     badge: "Multi-Spectral Biometrics"
   },
   {
@@ -55,7 +55,7 @@ const HARDWARE_PARTS = [
     color: "var(--color-mint)",
     dotX: "20%",
     dotY: "30%",
-    video: "/hardware_temple.mp4",
+    video: "/hardware_temple.mp4?v=10",
     badge: "Temporal Bone Actuator"
   }
 ];

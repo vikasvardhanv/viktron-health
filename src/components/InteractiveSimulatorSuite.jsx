@@ -35,6 +35,14 @@ export default function InteractiveSimulatorSuite({ showHeader = false }) {
   ]);
 
   const logFeedRef = useRef(null);
+  const simVideoRef = useRef(null);
+
+  useEffect(() => {
+    if (simVideoRef.current) {
+      simVideoRef.current.load();
+      simVideoRef.current.play().catch(() => {});
+    }
+  }, [hudMode]);
 
   // Switch mode helper for glasses
   const handleModeChange = (mode) => {
@@ -182,28 +190,29 @@ export default function InteractiveSimulatorSuite({ showHeader = false }) {
               <div className="relative w-full h-[460px] rounded-3xl overflow-hidden border border-white/15 bg-black shadow-2xl">
                 {/* Live Video Feed through Smart Glasses */}
                 <video
+                  ref={simVideoRef}
                   key={hudMode}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  onLoadedData={(e) => e.target.play()}
+                  preload="auto"
                   src={
                     hudMode === "med" 
-                      ? "/aurapath_medication_pill.mp4" 
+                      ? "/aurapath_medication_pill.mp4?v=10" 
                       : hudMode === "wander" 
-                        ? "/aurapath_wander_deviation.mp4" 
-                        : "/aurapath_daughter_recognition.mp4"
+                        ? "/aurapath_wander_deviation.mp4?v=10" 
+                        : "/aurapath_daughter_recognition.mp4?v=10"
                   }
                   className="w-full h-full object-cover filter brightness-90 contrast-110 transition-opacity duration-500"
                 >
                   <source 
                     src={
                       hudMode === "med" 
-                        ? "/aurapath_medication_pill.mp4" 
+                        ? "/aurapath_medication_pill.mp4?v=10" 
                         : hudMode === "wander" 
-                          ? "/aurapath_wander_deviation.mp4" 
-                          : "/aurapath_daughter_recognition.mp4"
+                          ? "/aurapath_wander_deviation.mp4?v=10" 
+                          : "/aurapath_daughter_recognition.mp4?v=10"
                     } 
                     type="video/mp4" 
                   />
