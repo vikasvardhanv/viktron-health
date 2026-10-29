@@ -190,12 +190,16 @@ export default function InteractiveSimulatorSuite() {
             {/* LEFT: HUD Viewport (8 cols) */}
             <div className="lg:col-span-8 flex flex-col gap-4">
               <div className="relative w-full h-[460px] rounded-3xl overflow-hidden border border-white/15 bg-black shadow-2xl">
-                {/* Background Room Image */}
-                <img
-                  src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
-                  alt="Living room patient environment"
-                  className="w-full h-full object-cover filter brightness-75 contrast-110"
-                />
+                {/* Live Video Feed through Smart Glasses */}
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover filter brightness-90 contrast-110"
+                >
+                  <source src="/aurapath_film.mp4" type="video/mp4" />
+                </video>
 
                 {/* HUD Scanline & Noise Layer */}
                 <div 

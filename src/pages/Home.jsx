@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import gsap from 'gsap';
-import { ArrowRight, Eye, Sparkles } from 'lucide-react';
+import { ArrowRight, Eye, Play, Sparkles } from 'lucide-react';
 
 import DiagnosticShuffler from '../components/DiagnosticShuffler';
 import TelemetryTypewriter from '../components/TelemetryTypewriter';
@@ -11,11 +11,14 @@ import ProtocolStack from '../components/ProtocolStack';
 import ManifestoSection from '../components/ManifestoSection';
 import ClinicalPricingSection from '../components/ClinicalPricingSection';
 import ExplodedScrubSection from '../components/ExplodedScrubSection';
+import FilmShowcaseSection from '../components/FilmShowcaseSection';
+import FilmModal from '../components/FilmModal';
 
 export default function Home() {
   const { openDemoModal } = useOutletContext() || { openDemoModal: () => {} };
   const heroContainer = useRef(null);
   const [heroVideoReady, setHeroVideoReady] = useState(false);
+  const [isFilmModalOpen, setIsFilmModalOpen] = useState(false);
 
   useEffect(() => {
     // Reset scroll restoration so user lands at top
@@ -90,24 +93,38 @@ export default function Home() {
           </p>
 
           <div className="hero-reveal flex flex-wrap items-center justify-center gap-4">
+            <button
+              onClick={() => setIsFilmModalOpen(true)}
+              className="btn-magnetic px-8 py-4 rounded-full bg-[var(--color-moss)] hover:bg-[var(--color-moss-dark)] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
+            >
+              <Play size={15} fill="currentColor" />
+              <span>Watch Film (0:20)</span>
+            </button>
+
             <a 
               href="#simulator-suite" 
               className="btn-magnetic px-8 py-4 rounded-full bg-[var(--color-clay)] hover:bg-[var(--color-clay-hover)] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
             >
               <Eye size={15} />
-              <span>Launch Interactive Simulator</span>
+              <span>Interactive Simulator</span>
             </a>
 
             <button 
               onClick={openDemoModal}
               className="btn-magnetic px-8 py-4 rounded-full bg-white/90 hover:bg-white border border-[var(--color-border)] text-[var(--color-foreground)] text-xs font-mono font-bold uppercase tracking-wider shadow-sm flex items-center gap-2"
             >
-              <span>Request Clinical Demo</span>
+              <span>Request Demo</span>
               <ArrowRight size={15} />
             </button>
           </div>
         </div>
       </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+          FEATURED PRODUCT FILM SHOWCASE
+          Real-time video showing Margaret recognizing granddaughter Emily
+          ════════════════════════════════════════════════════════════════ */}
+      <FilmShowcaseSection />
 
       {/* ════════════════════════════════════════════════════════════════
           SCROLL-DRIVEN EXPLODED DEVICE VIEW
@@ -204,6 +221,9 @@ export default function Home() {
           <div className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-[var(--color-mint)]/10 blur-3xl pointer-events-none" />
         </div>
       </section>
+
+      {/* Film Lightbox Modal */}
+      <FilmModal isOpen={isFilmModalOpen} onClose={() => setIsFilmModalOpen(false)} />
     </div>
   );
 }
