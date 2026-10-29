@@ -187,6 +187,14 @@ export default function InteractiveSimulatorSuite({ showHeader = false }) {
                   loop
                   muted
                   playsInline
+                  onLoadedData={(e) => e.target.play()}
+                  src={
+                    hudMode === "med" 
+                      ? "/aurapath_medication_pill.mp4" 
+                      : hudMode === "wander" 
+                        ? "/aurapath_wander_deviation.mp4" 
+                        : "/aurapath_daughter_recognition.mp4"
+                  }
                   className="w-full h-full object-cover filter brightness-90 contrast-110 transition-opacity duration-500"
                 >
                   <source 
@@ -195,7 +203,7 @@ export default function InteractiveSimulatorSuite({ showHeader = false }) {
                         ? "/aurapath_medication_pill.mp4" 
                         : hudMode === "wander" 
                           ? "/aurapath_wander_deviation.mp4" 
-                          : "/aurapath_daughter_7s.mp4"
+                          : "/aurapath_daughter_recognition.mp4"
                     } 
                     type="video/mp4" 
                   />
