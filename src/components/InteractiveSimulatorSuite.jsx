@@ -192,13 +192,23 @@ export default function InteractiveSimulatorSuite() {
               <div className="relative w-full h-[460px] rounded-3xl overflow-hidden border border-white/15 bg-black shadow-2xl">
                 {/* Live Video Feed through Smart Glasses */}
                 <video
+                  key={hudMode}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="w-full h-full object-cover filter brightness-90 contrast-110"
+                  className="w-full h-full object-cover filter brightness-90 contrast-110 transition-opacity duration-500"
                 >
-                  <source src="/aurapath_daughter_7s.mp4" type="video/mp4" />
+                  <source 
+                    src={
+                      hudMode === "med" 
+                        ? "/aurapath_medication_pill.mp4" 
+                        : hudMode === "wander" 
+                          ? "/aurapath_wander_deviation.mp4" 
+                          : "/aurapath_daughter_7s.mp4"
+                    } 
+                    type="video/mp4" 
+                  />
                 </video>
 
                 {/* HUD Scanline & Noise Layer */}
@@ -218,7 +228,7 @@ export default function InteractiveSimulatorSuite() {
                   <div className="flex justify-between items-center text-[11px] font-mono text-[var(--color-mint)]">
                     <span className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[var(--color-mint)] animate-ping" />
-                      OPTICAL VECTOR CORE: ARMED
+                      {hudMode === "med" ? "PRESCRIPTION OCR DETECTOR: ACTIVE" : hudMode === "wander" ? "GEOPATH PERIMETER: DEVIATION DETECTED" : "OPTICAL VECTOR CORE: ARMED"}
                     </span>
                     <span>LATENCY: 0.38s</span>
                   </div>
