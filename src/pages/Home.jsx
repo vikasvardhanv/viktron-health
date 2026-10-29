@@ -1,286 +1,278 @@
-import { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { useGSAP } from '@gsap/react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowRight, Eye, Cpu, ShieldCheck, Sparkles, Volume2, Activity } from 'lucide-react';
+
+import DiagnosticShuffler from '../components/DiagnosticShuffler';
+import TelemetryTypewriter from '../components/TelemetryTypewriter';
+import CursorProtocolScheduler from '../components/CursorProtocolScheduler';
+import InteractiveSimulatorSuite from '../components/InteractiveSimulatorSuite';
+import ProtocolStack from '../components/ProtocolStack';
+import ManifestoSection from '../components/ManifestoSection';
+import ClinicalPricingSection from '../components/ClinicalPricingSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ════════════════════════════════════════════════════════════════
-   EXPLODED VIEW PARTS — Mapped to actual components visible in
-   the test101.mp4 video. Positions are in percentage of the
-   viewport, calculated from pixel analysis of the fully-exploded
-   frame of the video (1280×720).
-   ════════════════════════════════════════════════════════════════ */
 const EXPLODED_PARTS = [
   {
-    label: 'Optical Display Array',
+    label: 'Optical Waveguide Array',
     heading: 'See without being seen.',
-    body: 'A transparent micro-OLED waveguide projects contextual cues directly into the wearer\'s field of view. Facial vectors, waypoint prompts, and caregiver alerts — rendered at 60fps with zero perceptible latency.',
-    partName: 'Optical Display Array',
+    body: 'A transparent micro-OLED waveguide projects contextual relationship cues directly into the wearer\'s field of view at 60fps with sub-0.4s facial recognition latency.',
+    partName: 'Optical Waveguide Array',
     partDesc: 'Micro-OLED waveguide projection',
     dotX: 64,
     dotY: 35,
-    labelX: 80,
-    labelY: 14,
+    labelX: 78,
+    labelY: 15,
   },
   {
     label: 'Neural Processing Unit',
     heading: 'Think on the edge.',
-    body: 'The on-device neural engine runs a quantized 8-bit inference graph for facial recognition, ambient anomaly detection, and FHIR-compliant vital triage — all in under 200ms, with zero outbound network calls.',
-    partName: 'Neural Processing Unit',
-    partDesc: '8-bit quantized on-device inference',
+    body: 'The on-device Hailo-8 neural engine runs an 8-bit quantized inference graph for face vectors, hazard detection, and FHIR vitals triage — zero raw video leaves the titanium frame.',
+    partName: 'Hailo-8 NPU Silicon',
+    partDesc: '8-bit quantized offline inference',
     dotX: 34,
     dotY: 61,
     labelX: 8,
-    labelY: 68,
+    labelY: 65,
   },
   {
     label: 'Sensor & Battery',
     heading: 'Sense everything. Charge nothing.',
-    body: 'A multi-spectral sensor cluster pairs with an all-day lithium-polymer cell. Ambient light, proximity, and pulse oximetry run continuously — the battery outlasts the shift.',
-    partName: 'Sensor & Battery Module',
-    partDesc: 'Multi-spectral sensing + all-day power',
+    body: 'A multi-spectral sensor cluster pairs with an 18-hour continuous lithium-polymer cell. Optical sensing, proximity, and pulse oximetry run all day without thermal hotspots.',
+    partName: 'Sensor & Power Module',
+    partDesc: 'Multi-spectral sensing + 18h autonomy',
     dotX: 63,
     dotY: 66,
-    labelX: 80,
-    labelY: 76,
+    labelX: 78,
+    labelY: 75,
   },
   {
-    label: 'Temple Arm',
+    label: 'Bone Conduction Arm',
     heading: 'Wear it. Forget it.',
-    body: 'The temple arm houses the bone-conduction transducer and flex PCB in a titanium alloy frame weighing under 38g. No pressure points. No stigma. Just cognition restored.',
-    partName: 'Temple Arm Assembly',
+    body: 'Dual bone-conduction transducers whisper cues like "Your daughter, Sarah" through temporal bone resonance. 38g titanium alloy chassis eliminates social stigma.',
+    partName: 'Titanium Temple Assembly',
     partDesc: 'Titanium frame + bone-conduction driver',
     dotX: 16,
-    dotY: 39,
-    labelX: 4,
-    labelY: 30,
-  },
-  {
-    label: 'Hinge Mechanism',
-    heading: 'Precision in every fold.',
-    body: 'A dual-axis micro-hinge with detented positions at 15°, 30°, and 45°. Designed for 50,000 fold cycles with zero play — the only moving part, and it never loosens.',
-    partName: 'Hinge Mechanism',
-    partDesc: 'Dual-axis detented micro-hinge',
-    dotX: 44,
-    dotY: 54,
-    labelX: 38,
-    labelY: 42,
+    dotY: 30,
+    labelX: 8,
+    labelY: 20,
   },
 ];
 
 export default function Home() {
+  const { openDemoModal } = useOutletContext() || { openDemoModal: () => {} };
   const heroContainer = useRef(null);
-  const scrollVideoRef = useRef(null);
   const scrollSectionRef = useRef(null);
+  const scrollVideoRef = useRef(null);
   const [heroVideoReady, setHeroVideoReady] = useState(false);
 
-  // Hero entrance animations
-  useGSAP(() => {
-    gsap.fromTo('.hero-reveal',
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", delay: 0.3 }
-    );
-  }, { scope: heroContainer });
-
-  // Scroll-driven video scrub
   useEffect(() => {
-    const video = scrollVideoRef.current;
-    const section = scrollSectionRef.current;
-    if (!video || !section) return;
+    const ctx = gsap.context(() => {
+      // Hero entrance reveal
+      gsap.fromTo(
+        '.hero-reveal',
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
+      );
 
-    let ctx = null;
+      // Scroll-driven Exploded View scrubbing with test101.mp4
+      const section = scrollSectionRef.current;
+      const video = scrollVideoRef.current;
+      if (!section || !video) return;
 
-    const buildTimeline = () => {
-      const duration = video.duration || 2;
-
-      // Kill any previous ScrollTrigger from this component
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.vars.trigger === section) st.kill();
-      });
-
-      ctx = gsap.context(() => {
-        // Use 5x viewport height for 5 parts — more scroll room
-        const scrollDistance = window.innerHeight * 5;
+      const initScrub = () => {
+        const videoDuration = video.duration || 1.9;
 
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: `+=${scrollDistance}px`,
+            end: '+=2500',
             pin: true,
-            scrub: 1.5,
+            scrub: 0.6,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
         });
 
-        // Video scrub: play through the full exploded animation
-        tl.fromTo(video, { currentTime: 0 }, { currentTime: duration, ease: 'none' }, 0);
+        // Scrub video currentTime
+        tl.to(video, {
+          currentTime: videoDuration * 0.95,
+          ease: 'none',
+          duration: 1,
+        }, 0);
 
-        // Each part gets its own enter/hold/exit window
+        // Sequence exploded callouts
         const partCount = EXPLODED_PARTS.length;
-        const partDuration = 0.85 / partCount; // total animation space per part
-        const enterFrac = 0.4;  // fraction of partDuration for enter
-        const holdFrac = 0.35;  // fraction for hold
-        const exitFrac = 0.25;  // fraction for exit
+        const partDuration = 0.85 / partCount;
 
         EXPLODED_PARTS.forEach((part, i) => {
           const base = 0.08 + i * partDuration;
-          const enterEnd = base + partDuration * enterFrac;
-          const holdEnd = enterEnd + partDuration * holdFrac;
-          const exitEnd = holdEnd + partDuration * exitFrac;
+          const enterEnd = base + partDuration * 0.4;
+          const holdEnd = enterEnd + partDuration * 0.35;
+          const exitEnd = holdEnd + partDuration * 0.25;
 
           const textEl = section.querySelector(`.scroll-text-${i}`);
           const labelEl = section.querySelector(`.part-label-${i}`);
           const lineEl = section.querySelector(`.part-line-${i}`);
           const dotEl = section.querySelector(`.part-dot-${i}`);
 
-          if (!textEl) return;
-
-          // Text block: slide up and fade in, hold, slide up and fade out
-          tl.fromTo(textEl,
-            { yPercent: 60, opacity: 0 },
-            { yPercent: 0, opacity: 1, duration: enterEnd - base, ease: 'power3.out' },
-            base
-          );
-          tl.to(textEl,
-            { yPercent: -40, opacity: 0, duration: exitEnd - holdEnd, ease: 'power3.in' },
-            holdEnd
-          );
-
-          // Callout label: fade + slide in, then fade out
-          if (labelEl) {
-            tl.fromTo(labelEl,
-              { opacity: 0, y: 20, scale: 0.9 },
-              { opacity: 1, y: 0, scale: 1, duration: enterEnd - base, ease: 'back.out(1.4)' },
-              base + 0.02
+          if (textEl) {
+            tl.fromTo(
+              textEl,
+              { yPercent: 40, opacity: 0 },
+              { yPercent: 0, opacity: 1, duration: enterEnd - base, ease: 'power3.out' },
+              base
             );
-            tl.to(labelEl,
-              { opacity: 0, y: -15, scale: 0.95, duration: exitEnd - holdEnd, ease: 'power2.in' },
+            tl.to(
+              textEl,
+              { yPercent: -30, opacity: 0, duration: exitEnd - holdEnd, ease: 'power3.in' },
               holdEnd
             );
           }
 
-          // Connecting line: draw from dot to label
-          if (lineEl) {
-            tl.fromTo(lineEl,
-              { attr: { 'stroke-dashoffset': 200 }, opacity: 0 },
-              { attr: { 'stroke-dashoffset': 0 }, opacity: 1, duration: 0.1, ease: 'power2.out' },
-              base + 0.01
+          if (labelEl) {
+            tl.fromTo(
+              labelEl,
+              { opacity: 0, scale: 0.9 },
+              { opacity: 1, scale: 1, duration: enterEnd - base, ease: 'back.out(1.4)' },
+              base
             );
-            tl.to(lineEl,
+            tl.to(
+              labelEl,
+              { opacity: 0, scale: 0.95, duration: exitEnd - holdEnd, ease: 'power2.in' },
+              holdEnd
+            );
+          }
+
+          if (lineEl) {
+            tl.fromTo(
+              lineEl,
+              { attr: { 'stroke-dashoffset': 200 }, opacity: 0 },
+              { attr: { 'stroke-dashoffset': 0 }, opacity: 0.8, duration: enterEnd - base, ease: 'power2.out' },
+              base
+            );
+            tl.to(
+              lineEl,
               { opacity: 0, duration: exitEnd - holdEnd, ease: 'power2.in' },
               holdEnd
             );
           }
 
-          // Dot: pop in and shrink out
           if (dotEl) {
-            tl.fromTo(dotEl,
-              { opacity: 0, attr: { r: 0 } },
-              { opacity: 1, attr: { r: 0.8 }, duration: 0.06, ease: 'back.out(2.5)' },
+            tl.fromTo(
+              dotEl,
+              { attr: { r: 0 }, opacity: 0 },
+              { attr: { r: 0.8 }, opacity: 1, duration: 0.05, ease: 'power2.out' },
               base
             );
-            tl.to(dotEl,
-              { opacity: 0, attr: { r: 0.3 }, duration: exitEnd - holdEnd },
+            tl.to(
+              dotEl,
+              { opacity: 0, duration: exitEnd - holdEnd, ease: 'power2.in' },
               holdEnd
             );
           }
         });
+      };
 
-        // Scroll hint fades early
-        const scrollHint = section.querySelector('.scroll-hint');
-        if (scrollHint) {
-          tl.to(scrollHint, { opacity: 0, duration: 0.1 }, 0.05);
-        }
-      });
-    };
-
-    if (video.readyState >= 1) {
-      buildTimeline();
-    } else {
-      video.addEventListener('loadedmetadata', buildTimeline, { once: true });
-    }
+      if (video.readyState >= 1) {
+        initScrub();
+      } else {
+        video.addEventListener('loadedmetadata', initScrub, { once: true });
+      }
+    }, heroContainer);
 
     return () => {
-      if (ctx) {
-        try {
-          // Scroll to top first so the pinned section is released cleanly
-          window.scrollTo(0, 0);
-          ctx.revert();
-        } catch (_) {
-          // GSAP context revert can fail if DOM nodes are already removed
-          // Force-kill any remaining ScrollTriggers as fallback
-          ScrollTrigger.getAll().forEach(st => {
-            try { st.kill(); } catch (_2) { /* ignore */ }
-          });
-        }
+      try {
+        ctx.revert();
+      } catch (_) {
+        ScrollTrigger.getAll().forEach(st => {
+          try { st.kill(); } catch (_2) {}
+        });
       }
     };
   }, []);
 
   return (
-    <>
-      {/* Hero Section */}
-      <div ref={heroContainer} className="flex flex-col" style={{ marginTop: '-8rem' }}>
-        <section className="hero-video-section">
-          <div className="hero-video-wrapper">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              onCanPlay={() => setHeroVideoReady(true)}
-              className={`hero-video ${heroVideoReady ? 'hero-video--loaded' : ''}`}
-            >
-              <source src="/High_quality_exploded_enginee.mp4" type="video/mp4" />
-            </video>
-            <div className="hero-mask-gradient" aria-hidden="true" />
+    <div ref={heroContainer} className="flex flex-col w-full overflow-hidden">
+      {/* ════════════════════════════════════════════════════════════════
+          HERO SECTION — "The Opening Shot"
+          Full-bleed video background with heavy inward gradient mask,
+          high scale contrast typography, and immediate action buttons.
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="hero-video-section -mt-20">
+        <div className="hero-video-wrapper">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            onCanPlay={() => setHeroVideoReady(true)}
+            className={`hero-video ${heroVideoReady ? 'hero-video--loaded' : ''}`}
+          >
+            <source src="/High_quality_exploded_enginee.mp4" type="video/mp4" />
+          </video>
+          <div className="hero-mask-gradient" aria-hidden="true" />
+        </div>
+
+        <div className="hero-content">
+          <div className="hero-reveal hero-badge">
+            <span className="hero-badge-dot" />
+            <span>Clinical Edge Inference // AuraPath & AuraGuide</span>
           </div>
 
-          <div className="hero-content">
-            <div className="hero-reveal hero-badge">
-              <span className="hero-badge-dot" />
-              Clinical Edge Inference
-            </div>
+          <div className="hero-reveal flex justify-center mb-6">
+            <img 
+              src="/viktron-health-logo.png" 
+              alt="Viktron Health" 
+              className="w-16 h-16 object-contain drop-shadow-md" 
+            />
+          </div>
 
-            <div className="flex justify-center mb-6">
-              <img src="/viktron-health-logo.png" alt="Viktron Health" className="w-16 h-16 object-contain hero-reveal" />
-            </div>
-
-            <h1 className="hero-reveal hero-headline">
-              Cognitive dignity
-              <span className="inline-image-pill">
-                <img
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=400&auto=format&fit=crop"
-                  className="w-full h-full object-cover grayscale opacity-80"
-                  alt="Clinical imagery"
-                />
-              </span>
+          <h1 className="hero-reveal hero-headline font-sans">
+            Cognitive dignity
+            <span className="inline-image-pill">
+              <img
+                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=400&auto=format&fit=crop"
+                className="w-full h-full object-cover grayscale opacity-80"
+                alt="Clinical setting"
+              />
+            </span>
+            <span className="hero-headline-drama font-serif">
               built for the edge.
-            </h1>
+            </span>
+          </h1>
 
-            <p className="hero-reveal hero-subtitle">
-              AuraGuide and AuraPath establish a high-fidelity cognitive assurance framework.
-              Sub-second facial vectoring and FHIR-compliant vital processing — entirely on-device.
-            </p>
+          <p className="hero-reveal hero-subtitle">
+            AuraGuide and AuraPath establish a zero-cloud cognitive assurance framework.
+            Sub-0.4s facial vectoring and FHIR-compliant vital processing — entirely on-device to preserve personal dignity and eye contact.
+          </p>
 
-            <div className="hero-reveal">
-              <Link to="/platform" className="hero-cta">
-                Explore Architecture
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+          <div className="hero-reveal flex flex-wrap items-center justify-center gap-4">
+            <a 
+              href="#simulator-suite" 
+              className="btn-magnetic px-8 py-4 rounded-full bg-[var(--color-clay)] hover:bg-[var(--color-clay-hover)] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
+            >
+              <Eye size={15} />
+              <span>Launch Interactive Simulator</span>
+            </a>
+
+            <button 
+              onClick={openDemoModal}
+              className="btn-magnetic px-8 py-4 rounded-full bg-white/90 hover:bg-white border border-[var(--color-border)] text-[var(--color-foreground)] text-xs font-mono font-bold uppercase tracking-wider shadow-sm flex items-center gap-2"
+            >
+              <span>Request Clinical Demo</span>
+              <ArrowRight size={15} />
+            </button>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       {/* ════════════════════════════════════════════════════════════════
-          SCROLL-DRIVEN EXPLODED VIEW
-          Uses test101.mp4 — a 1.9s exploded device animation.
-          As you scroll, the video scrubs frame-by-frame, revealing
-          each part of the device with labeled callouts.
+          SCROLL-DRIVEN EXPLODED DEVICE VIEW
+          Uses test101.mp4 — scrubbing frame-by-frame with callout pins
           ════════════════════════════════════════════════════════════════ */}
       <section ref={scrollSectionRef} className="scroll-scrub-section">
         <video
@@ -296,7 +288,7 @@ export default function Home() {
 
         <div className="scroll-scrub-mask" aria-hidden="true" />
 
-        {/* SVG overlay for labeled part callouts with connecting lines */}
+        {/* SVG Callout Lines & Dots */}
         <svg className="scroll-labels-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           {EXPLODED_PARTS.map((part, i) => (
             <g key={`callout-svg-${i}`}>
@@ -305,7 +297,7 @@ export default function Home() {
                 cx={part.dotX}
                 cy={part.dotY}
                 r="0"
-                fill="var(--color-accent)"
+                fill="var(--color-clay)"
                 opacity="0"
               />
               <line
@@ -314,8 +306,8 @@ export default function Home() {
                 y1={part.dotY}
                 x2={part.labelX + (part.labelX < 50 ? 3 : -3)}
                 y2={part.labelY + 4}
-                stroke="var(--color-accent)"
-                strokeWidth="0.1"
+                stroke="var(--color-clay)"
+                strokeWidth="0.12"
                 strokeDasharray="200"
                 strokeDashoffset="200"
                 opacity="0"
@@ -324,7 +316,7 @@ export default function Home() {
           ))}
         </svg>
 
-        {/* HTML callout labels — positioned absolutely over the video */}
+        {/* HTML Callout Cards */}
         {EXPLODED_PARTS.map((part, i) => (
           <div
             key={`callout-${i}`}
@@ -339,7 +331,7 @@ export default function Home() {
           </div>
         ))}
 
-        {/* Text sections that rive through on scroll */}
+        {/* Text narrative blocks that rive through on scroll */}
         {EXPLODED_PARTS.map((part, i) => (
           <div key={`text-${i}`} className={`scroll-text-${i} scroll-text-block`}>
             <span className="scroll-text-label">{part.label}</span>
@@ -348,51 +340,104 @@ export default function Home() {
           </div>
         ))}
 
-        {/* Scroll hint */}
+        {/* Scroll hint indicator */}
         <div className="scroll-hint">
-          <span>Scroll to explore</span>
+          <span>Scroll to explore device</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 5v14M19 12l-7 7-7-7" />
           </svg>
         </div>
       </section>
 
-      {/* Feature Section */}
-      <section className="feature-section">
-        <h2 className="feature-heading">
-          We replaced the cloud with a neural processing unit.
-        </h2>
+      {/* ════════════════════════════════════════════════════════════════
+          FEATURES — 3 INTERACTIVE FUNCTIONAL ARTIFACTS
+          1. Diagnostic Shuffler (AuraPath Glasses)
+          2. Telemetry Typewriter (AuraGuide FHIR Feed)
+          3. Cursor Protocol Scheduler (Memory Schedule Grid)
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
+        <div className="max-w-3xl mb-14">
+          <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-clay)] mb-2 block">
+            Functional Micro-UIs // Interactive Artifacts
+          </span>
+          <h2 className="font-sans font-bold text-3xl md:text-5xl text-[var(--color-foreground)] tracking-tight">
+            We replaced the cloud with a neural processing unit.
+          </h2>
+          <p className="text-[var(--color-muted-foreground)] mt-3 text-base md:text-lg">
+            Experience our three operational micro-interfaces running local optical inference, FHIR stream auditing, and protocol synchronization.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bento-card p-10 flex flex-col justify-end min-h-[450px] bg-[var(--color-muted)] overflow-hidden relative group">
-            <div className="absolute inset-0 z-0 opacity-40 transition-transform duration-1000 group-hover:scale-105">
-              <img
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop"
-                className="w-full h-full object-cover grayscale mix-blend-multiply"
-                alt="Tech"
-              />
-            </div>
-            <div className="relative z-10 bg-[var(--color-surface)]/95 backdrop-blur-md p-6 rounded-2xl max-w-md border border-[var(--color-border)] shadow-sm">
-              <h3 className="font-medium text-xl mb-2 text-[var(--color-foreground)]">Whisper-Quiet Delivery</h3>
-              <p className="text-sm text-[var(--color-muted-foreground)] leading-relaxed">
-                Contextual relationships delivered via bone-conduction audio, preserving natural social fluidity without breaking eye contact.
-              </p>
-            </div>
-          </div>
-
-          <div className="bento-card p-8 flex flex-col justify-between min-h-[450px]">
-            <div className="w-12 h-12 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 flex items-center justify-center">
-              <span className="font-mono text-xs text-[var(--color-accent)] font-bold">HL7</span>
-            </div>
-            <div>
-              <h3 className="font-medium text-xl mb-2 text-[var(--color-foreground)]">Clinical OS Dashboard</h3>
-              <p className="text-sm text-[var(--color-muted-foreground)] leading-relaxed">
-                Direct synchronization with leading EHR platforms for caregivers. Zero patient data leakage.
-              </p>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <DiagnosticShuffler />
+          <TelemetryTypewriter />
+          <CursorProtocolScheduler />
         </div>
       </section>
-    </>
+
+      {/* ════════════════════════════════════════════════════════════════
+          LIVE INTERACTIVE SIMULATOR SUITE
+          The complete in-browser digital instrument:
+          AuraPath Smart Glasses POV + AuraGuide Clinical Copilot Console
+          ════════════════════════════════════════════════════════════════ */}
+      <InteractiveSimulatorSuite />
+
+      {/* ════════════════════════════════════════════════════════════════
+          PHILOSOPHY — "THE MANIFESTO"
+          Contrasting dark section with organic textures and
+          uncompromising dignity statements.
+          ════════════════════════════════════════════════════════════════ */}
+      <ManifestoSection />
+
+      {/* ════════════════════════════════════════════════════════════════
+          PROTOCOL — "STICKY STACKING ARCHIVE"
+          3 pinned stacking cards with custom animated SVG canvases
+          ════════════════════════════════════════════════════════════════ */}
+      <ProtocolStack />
+
+      {/* ════════════════════════════════════════════════════════════════
+          CLINICAL DEPLOYMENT & PRICING
+          3-tier clinical package grid with popup intake modal triggers
+          ════════════════════════════════════════════════════════════════ */}
+      <ClinicalPricingSection onSelectTier={openDemoModal} />
+
+      {/* ════════════════════════════════════════════════════════════════
+          FINAL CALL TO ACTION BANNER
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
+        <div className="rounded-[3rem] bg-[var(--color-moss)] text-white p-10 md:p-16 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+          <div className="max-w-2xl relative z-10">
+            <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-mint)] font-bold mb-3 block">
+              Begin Institutional Onboarding
+            </span>
+            <h2 className="font-sans font-bold text-3xl md:text-5xl tracking-tight leading-tight mb-4">
+              Ready to restore cognitive agency in your care facility?
+            </h2>
+            <p className="text-white/80 text-base md:text-lg font-light leading-relaxed">
+              Schedule an in-person or virtual hardware demonstration with our clinical engineering team. Test the titanium glasses and EHR copilot on your existing patient workflows.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4 relative z-10 flex-shrink-0">
+            <button
+              onClick={openDemoModal}
+              className="btn-magnetic px-8 py-4 rounded-full bg-[var(--color-clay)] hover:bg-[var(--color-clay-hover)] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
+            >
+              <span>Schedule Clinical Demonstration</span>
+              <ArrowRight size={15} />
+            </button>
+            <a
+              href="mailto:clinical-intake@viktronhealth.com"
+              className="btn-magnetic px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-bold uppercase tracking-wider"
+            >
+              Email Medical Team
+            </a>
+          </div>
+
+          {/* Ambient Decorative Rings */}
+          <div className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-[var(--color-mint)]/10 blur-3xl pointer-events-none" />
+        </div>
+      </section>
+    </div>
   );
 }
