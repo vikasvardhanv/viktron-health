@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Eye, Cpu, ShieldCheck, Sparkles, Volume2, Activity } from 'lucide-react';
+import { ArrowRight, Eye, Sparkles } from 'lucide-react';
 
 import DiagnosticShuffler from '../components/DiagnosticShuffler';
 import TelemetryTypewriter from '../components/TelemetryTypewriter';
@@ -11,192 +10,32 @@ import InteractiveSimulatorSuite from '../components/InteractiveSimulatorSuite';
 import ProtocolStack from '../components/ProtocolStack';
 import ManifestoSection from '../components/ManifestoSection';
 import ClinicalPricingSection from '../components/ClinicalPricingSection';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const EXPLODED_PARTS = [
-  {
-    label: 'Optical Waveguide Array',
-    heading: 'See without being seen.',
-    body: 'A transparent micro-OLED waveguide projects contextual relationship cues directly into the wearer\'s field of view at 60fps with sub-0.4s facial recognition latency.',
-    partName: 'Optical Waveguide Array',
-    partDesc: 'Micro-OLED waveguide projection',
-    dotX: 64,
-    dotY: 35,
-    labelX: 78,
-    labelY: 15,
-  },
-  {
-    label: 'Neural Processing Unit',
-    heading: 'Think on the edge.',
-    body: 'The on-device Hailo-8 neural engine runs an 8-bit quantized inference graph for face vectors, hazard detection, and FHIR vitals triage — zero raw video leaves the titanium frame.',
-    partName: 'Hailo-8 NPU Silicon',
-    partDesc: '8-bit quantized offline inference',
-    dotX: 34,
-    dotY: 61,
-    labelX: 8,
-    labelY: 65,
-  },
-  {
-    label: 'Sensor & Battery',
-    heading: 'Sense everything. Charge nothing.',
-    body: 'A multi-spectral sensor cluster pairs with an 18-hour continuous lithium-polymer cell. Optical sensing, proximity, and pulse oximetry run all day without thermal hotspots.',
-    partName: 'Sensor & Power Module',
-    partDesc: 'Multi-spectral sensing + 18h autonomy',
-    dotX: 63,
-    dotY: 66,
-    labelX: 78,
-    labelY: 75,
-  },
-  {
-    label: 'Bone Conduction Arm',
-    heading: 'Wear it. Forget it.',
-    body: 'Dual bone-conduction transducers whisper cues like "Your daughter, Sarah" through temporal bone resonance. 38g titanium alloy chassis eliminates social stigma.',
-    partName: 'Titanium Temple Assembly',
-    partDesc: 'Titanium frame + bone-conduction driver',
-    dotX: 16,
-    dotY: 30,
-    labelX: 8,
-    labelY: 20,
-  },
-];
+import ExplodedScrubSection from '../components/ExplodedScrubSection';
 
 export default function Home() {
   const { openDemoModal } = useOutletContext() || { openDemoModal: () => {} };
   const heroContainer = useRef(null);
-  const scrollSectionRef = useRef(null);
-  const scrollVideoRef = useRef(null);
   const [heroVideoReady, setHeroVideoReady] = useState(false);
 
   useEffect(() => {
+    // Reset scroll restoration so user lands at top
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     const ctx = gsap.context(() => {
-      // Hero entrance reveal
       gsap.fromTo(
         '.hero-reveal',
         { y: 35, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
       );
-
-      // Scroll-driven Exploded View scrubbing with test101.mp4
-      const section = scrollSectionRef.current;
-      const video = scrollVideoRef.current;
-      if (!section || !video) return;
-
-      const initScrub = () => {
-        const videoDuration = video.duration || 1.9;
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: '+=2500',
-            pin: true,
-            scrub: 0.6,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        // Scrub video currentTime
-        tl.to(video, {
-          currentTime: videoDuration * 0.95,
-          ease: 'none',
-          duration: 1,
-        }, 0);
-
-        // Sequence exploded callouts
-        const partCount = EXPLODED_PARTS.length;
-        const partDuration = 0.85 / partCount;
-
-        EXPLODED_PARTS.forEach((part, i) => {
-          const base = 0.08 + i * partDuration;
-          const enterEnd = base + partDuration * 0.4;
-          const holdEnd = enterEnd + partDuration * 0.35;
-          const exitEnd = holdEnd + partDuration * 0.25;
-
-          const textEl = section.querySelector(`.scroll-text-${i}`);
-          const labelEl = section.querySelector(`.part-label-${i}`);
-          const lineEl = section.querySelector(`.part-line-${i}`);
-          const dotEl = section.querySelector(`.part-dot-${i}`);
-
-          if (textEl) {
-            tl.fromTo(
-              textEl,
-              { yPercent: 40, opacity: 0 },
-              { yPercent: 0, opacity: 1, duration: enterEnd - base, ease: 'power3.out' },
-              base
-            );
-            tl.to(
-              textEl,
-              { yPercent: -30, opacity: 0, duration: exitEnd - holdEnd, ease: 'power3.in' },
-              holdEnd
-            );
-          }
-
-          if (labelEl) {
-            tl.fromTo(
-              labelEl,
-              { opacity: 0, scale: 0.9 },
-              { opacity: 1, scale: 1, duration: enterEnd - base, ease: 'back.out(1.4)' },
-              base
-            );
-            tl.to(
-              labelEl,
-              { opacity: 0, scale: 0.95, duration: exitEnd - holdEnd, ease: 'power2.in' },
-              holdEnd
-            );
-          }
-
-          if (lineEl) {
-            tl.fromTo(
-              lineEl,
-              { attr: { 'stroke-dashoffset': 200 }, opacity: 0 },
-              { attr: { 'stroke-dashoffset': 0 }, opacity: 0.8, duration: enterEnd - base, ease: 'power2.out' },
-              base
-            );
-            tl.to(
-              lineEl,
-              { opacity: 0, duration: exitEnd - holdEnd, ease: 'power2.in' },
-              holdEnd
-            );
-          }
-
-          if (dotEl) {
-            tl.fromTo(
-              dotEl,
-              { attr: { r: 0 }, opacity: 0 },
-              { attr: { r: 0.8 }, opacity: 1, duration: 0.05, ease: 'power2.out' },
-              base
-            );
-            tl.to(
-              dotEl,
-              { opacity: 0, duration: exitEnd - holdEnd, ease: 'power2.in' },
-              holdEnd
-            );
-          }
-        });
-      };
-
-      if (video.readyState >= 1) {
-        initScrub();
-      } else {
-        video.addEventListener('loadedmetadata', initScrub, { once: true });
-      }
     }, heroContainer);
 
-    return () => {
-      try {
-        ctx.revert();
-      } catch (_) {
-        ScrollTrigger.getAll().forEach(st => {
-          try { st.kill(); } catch (_2) {}
-        });
-      }
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={heroContainer} className="flex flex-col w-full overflow-hidden">
+    <div ref={heroContainer} className="flex flex-col w-full">
       {/* ════════════════════════════════════════════════════════════════
           HERO SECTION — "The Opening Shot"
           Full-bleed video background with heavy inward gradient mask,
@@ -210,7 +49,7 @@ export default function Home() {
             muted
             playsInline
             onCanPlay={() => setHeroVideoReady(true)}
-            className={`hero-video ${heroVideoReady ? 'hero-video--loaded' : ''}`}
+            className={`hero-video ${heroVideoReady ? 'hero-video--loaded' : 'opacity-20'}`}
           >
             <source src="/High_quality_exploded_enginee.mp4" type="video/mp4" />
           </video>
@@ -274,80 +113,7 @@ export default function Home() {
           SCROLL-DRIVEN EXPLODED DEVICE VIEW
           Uses test101.mp4 — scrubbing frame-by-frame with callout pins
           ════════════════════════════════════════════════════════════════ */}
-      <section ref={scrollSectionRef} className="scroll-scrub-section">
-        <video
-          ref={scrollVideoRef}
-          muted
-          playsInline
-          preload="auto"
-          className="scroll-scrub-video"
-          style={{ pointerEvents: 'none' }}
-        >
-          <source src="/test101.mp4" type="video/mp4" />
-        </video>
-
-        <div className="scroll-scrub-mask" aria-hidden="true" />
-
-        {/* SVG Callout Lines & Dots */}
-        <svg className="scroll-labels-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          {EXPLODED_PARTS.map((part, i) => (
-            <g key={`callout-svg-${i}`}>
-              <circle
-                className={`part-dot-${i}`}
-                cx={part.dotX}
-                cy={part.dotY}
-                r="0"
-                fill="var(--color-clay)"
-                opacity="0"
-              />
-              <line
-                className={`part-line-${i}`}
-                x1={part.dotX}
-                y1={part.dotY}
-                x2={part.labelX + (part.labelX < 50 ? 3 : -3)}
-                y2={part.labelY + 4}
-                stroke="var(--color-clay)"
-                strokeWidth="0.12"
-                strokeDasharray="200"
-                strokeDashoffset="200"
-                opacity="0"
-              />
-            </g>
-          ))}
-        </svg>
-
-        {/* HTML Callout Cards */}
-        {EXPLODED_PARTS.map((part, i) => (
-          <div
-            key={`callout-${i}`}
-            className={`part-label-${i} scroll-part-label`}
-            style={{
-              left: `${part.labelX}%`,
-              top: `${part.labelY}%`,
-            }}
-          >
-            <span className="scroll-part-label-name">{part.partName}</span>
-            <span className="scroll-part-label-desc">{part.partDesc}</span>
-          </div>
-        ))}
-
-        {/* Text narrative blocks that rive through on scroll */}
-        {EXPLODED_PARTS.map((part, i) => (
-          <div key={`text-${i}`} className={`scroll-text-${i} scroll-text-block`}>
-            <span className="scroll-text-label">{part.label}</span>
-            <h2 className="scroll-text-heading">{part.heading}</h2>
-            <p className="scroll-text-body">{part.body}</p>
-          </div>
-        ))}
-
-        {/* Scroll hint indicator */}
-        <div className="scroll-hint">
-          <span>Scroll to explore device</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 5v14M19 12l-7 7-7-7" />
-          </svg>
-        </div>
-      </section>
+      <ExplodedScrubSection />
 
       {/* ════════════════════════════════════════════════════════════════
           FEATURES — 3 INTERACTIVE FUNCTIONAL ARTIFACTS
