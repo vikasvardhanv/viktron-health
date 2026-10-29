@@ -1,17 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #FDFCFB;
-  --color-surface: #FFFFFF;
-  --color-foreground: #09090B;
-  --color-muted: #F4F4F5;
-  --color-muted-foreground: #71717A;
-  --color-border: #E4E4E7;
-  --color-accent: #FF5A36;
+  /* Preset A: Organic Tech (Clinical Boutique) */
+  --color-moss: #2E4036;
+  --color-moss-dark: #1E2B24;
+  --color-moss-light: #445D4F;
+  --color-clay: #CC5833;
+  --color-clay-hover: #B84A28;
+  --color-cream: #F4F1EB;
+  --color-cream-subtle: #FAF8F5;
+  --color-charcoal: #141A17;
+  --color-charcoal-card: #1B2420;
+  --color-teal: #0F6E63;
+  --color-mint: #3DB894;
+  --color-mint-subtle: #E2F4EC;
 
-  --font-display: 'Instrument Serif', serif;
-  --font-sans: 'Outfit', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --color-background: #F4F1EB;
+  --color-surface: #FFFFFF;
+  --color-foreground: #141A17;
+  --color-muted: #EAE6DE;
+  --color-muted-foreground: #6A756F;
+  --color-border: #DDD8CD;
+  --color-accent: #CC5833;
+
+  --font-display: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Outfit', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+}
+
+:root {
+  --bg-gradient: linear-gradient(180deg, #F8F6F2 0%, #F1ECE3 100%);
 }
 
 body {
@@ -19,37 +38,89 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 html {
-  scroll-behavior: auto; /* GSAP handles smoothness */
+  scroll-behavior: auto; /* GSAP ScrollTrigger handles scroll smoothly */
 }
 
-.noise {
+/* ════════════════════════════════════════════════════════════════
+   GLOBAL NOISE OVERLAY (<feTurbulence> 0.04-0.05 opacity)
+   Eliminates flat digital gradients and adds organic tactile depth.
+   ════════════════════════════════════════════════════════════════ */
+.noise-overlay {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  z-index: 50;
+  z-index: 999;
   opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
+/* ════════════════════════════════════════════════════════════════
+   MAGNETIC BUTTONS & MICRO-INTERACTIONS
+   Subtle scale(1.03) with sliding background transition
+   ════════════════════════════════════════════════════════════════ */
+.btn-magnetic {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.btn-magnetic:hover {
+  transform: scale(1.03) translateY(-1px);
+}
+
+.btn-magnetic:active {
+  transform: scale(0.98);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BENTO CARDS & PILL CONTAINERS
+   ════════════════════════════════════════════════════════════════ */
 .bento-card {
-  @apply bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[24px] overflow-hidden relative shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-500 ease-out;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 2rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 24px -4px rgba(46, 64, 54, 0.06);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.bento-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -8px rgba(46, 64, 54, 0.12);
+  border-color: rgba(46, 64, 54, 0.25);
 }
 
 .inline-image-pill {
-  @apply inline-flex items-center justify-center align-middle mx-2 rounded-full overflow-hidden border border-[var(--color-border)];
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin: 0 0.5rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
   height: 0.85em;
   width: 2.2em;
   transform: translateY(-0.1em);
 }
 
 /* ════════════════════════════════════════════════════════════════
-   HERO VIDEO SECTION — Full-bleed looping background with
-   inward radial mask. Text has strong contrast for readability.
+   HERO VIDEO SECTION
    ════════════════════════════════════════════════════════════════ */
-
 .hero-video-section {
   position: relative;
   width: 100vw;
@@ -77,21 +148,19 @@ html {
 }
 
 .hero-video--loaded {
-  opacity: 0.25; /* Keep video dim so text pops */
+  opacity: 0.28;
 }
 
-/* Inward masking gradient */
 .hero-mask-gradient {
   position: absolute;
   inset: 0;
-  z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, var(--color-background) 0%, transparent 15%),
-    linear-gradient(to top, var(--color-background) 0%, transparent 20%),
+    linear-gradient(to bottom, var(--color-background) 0%, transparent 22%),
+    linear-gradient(to top, var(--color-background) 0%, transparent 25%),
     linear-gradient(to right, var(--color-background) 0%, transparent 12%),
     linear-gradient(to left, var(--color-background) 0%, transparent 12%),
-    radial-gradient(ellipse 80% 70% at 50% 50%, transparent 25%, var(--color-background) 100%);
+    radial-gradient(ellipse 85% 75% at 50% 50%, transparent 20%, var(--color-background) 100%);
 }
 
 .hero-content {
@@ -101,93 +170,74 @@ html {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 900px;
-  padding: 6rem 1.5rem 4rem;
+  max-width: 960px;
+  padding: 7rem 1.5rem 5rem;
 }
 
 .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.375rem 1rem;
+  padding: 0.45rem 1.25rem;
   border-radius: 9999px;
   border: 1px solid var(--color-border);
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  font-size: 11px;
+  backdrop-filter: blur(16px);
+  font-size: 12px;
   font-family: var(--font-mono);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   font-weight: 500;
   text-transform: uppercase;
-  color: var(--color-muted-foreground);
-  margin-bottom: 2.5rem;
+  color: var(--color-moss);
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .hero-badge-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 9999px;
-  background: var(--color-accent);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background: var(--color-mint);
+  box-shadow: 0 0 8px var(--color-mint);
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .hero-headline {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 7vw, 6rem);
-  line-height: 0.95;
+  font-size: clamp(3.2rem, 7.5vw, 6.2rem);
+  line-height: 0.98;
   letter-spacing: -0.03em;
   color: var(--color-foreground);
   margin-bottom: 2rem;
-  text-shadow:
-    0 0 40px rgba(253, 252, 251, 0.9),
-    0 0 80px rgba(253, 252, 251, 0.6),
-    0 2px 4px rgba(253, 252, 251, 0.4);
+  font-weight: 700;
+}
+
+.hero-headline-drama {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-moss);
+  display: block;
+  margin-top: 0.2rem;
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
   color: var(--color-muted-foreground);
-  max-width: 560px;
+  max-width: 620px;
   line-height: 1.7;
-  font-weight: 300;
-  margin-bottom: 2.5rem;
-  text-shadow:
-    0 0 30px rgba(253, 252, 251, 0.8),
-    0 0 60px rgba(253, 252, 251, 0.5);
-}
-
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: var(--color-foreground);
-  color: var(--color-surface);
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s;
-  transform: active-scale(0.95);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-.hero-cta:hover {
-  background: var(--color-foreground)/0.9;
+  font-weight: 400;
+  margin-bottom: 2.75rem;
 }
 
 /* ════════════════════════════════════════════════════════════════
    SCROLL-DRIVEN EXPLODED VIEW SECTION
-   Must NOT be inside a flex container — GSAP pin-spacer math
-   requires normal document flow. Width: 100%, height: 100vh,
-   no negative margins or 100vw breakouts.
    ════════════════════════════════════════════════════════════════ */
-
 .scroll-scrub-section {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #09090B;
+  background: #0E1411;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,26 +249,23 @@ html {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* test101.mp4 has a light gray background — blend it into the dark section */
-  opacity: 0.45;
-  filter: brightness(0.6) contrast(1.4) saturate(0.3);
+  opacity: 0.42;
+  filter: brightness(0.65) contrast(1.35) saturate(0.4);
 }
 
-/* Inward mask for the scrub section — darker edges to focus on center */
 .scroll-scrub-mask {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, #09090B 0%, transparent 12%),
-    linear-gradient(to top, #09090B 0%, transparent 15%),
-    linear-gradient(to right, #09090B 0%, transparent 8%),
-    linear-gradient(to left, #09090B 0%, transparent 8%),
-    radial-gradient(ellipse 60% 55% at 50% 50%, transparent 10%, #09090B 100%);
+    linear-gradient(to bottom, #0E1411 0%, transparent 14%),
+    linear-gradient(to top, #0E1411 0%, transparent 16%),
+    linear-gradient(to right, #0E1411 0%, transparent 8%),
+    linear-gradient(to left, #0E1411 0%, transparent 8%),
+    radial-gradient(ellipse 65% 60% at 50% 50%, transparent 12%, #0E1411 100%);
 }
 
-/* SVG overlay for callout lines and dots */
 .scroll-labels-svg {
   position: absolute;
   inset: 0;
@@ -229,7 +276,6 @@ html {
   overflow: visible;
 }
 
-/* HTML-based callout labels — crisp text rendering */
 .scroll-part-label {
   position: absolute;
   z-index: 4;
@@ -239,30 +285,30 @@ html {
   opacity: 0;
   will-change: transform, opacity;
   pointer-events: none;
+  background: rgba(14, 20, 17, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(204, 88, 51, 0.4);
 }
 
 .scroll-part-label-name {
   font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 600;
-  color: #FDFCFB;
+  color: #F4F1EB;
   letter-spacing: 0.02em;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 0 12px rgba(0,0,0,0.4);
-  white-space: nowrap;
 }
 
 .scroll-part-label-desc {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 400;
-  color: var(--color-accent);
+  font-weight: 500;
+  color: var(--color-clay);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
 }
 
-/* Text block that rives through the scrub section */
 .scroll-text-block {
   position: absolute;
   z-index: 5;
@@ -271,7 +317,7 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
   padding: 0 1.5rem;
   will-change: transform, opacity;
   opacity: 0;
@@ -283,40 +329,34 @@ html {
   font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-accent);
-  padding: 0.25rem 0.75rem;
-  border: 1px solid var(--color-accent);
+  color: var(--color-mint);
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(61, 184, 148, 0.4);
+  background: rgba(61, 184, 148, 0.08);
   border-radius: 9999px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .scroll-text-heading {
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  font-family: var(--font-sans);
+  font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+  font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.03em;
-  color: #FDFCFB;
-  text-shadow:
-    0 0 40px rgba(9, 9, 11, 0.8),
-    0 0 80px rgba(9, 9, 11, 0.4),
-    0 2px 6px rgba(0, 0, 0, 0.5);
+  color: #F4F1EB;
 }
 
 .scroll-text-body {
-  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  font-size: clamp(0.98rem, 1.35vw, 1.2rem);
   line-height: 1.7;
-  color: rgba(253, 252, 251, 0.75);
-  font-weight: 300;
-  max-width: 520px;
-  text-shadow:
-    0 0 20px rgba(9, 9, 11, 0.6),
-    0 1px 3px rgba(0, 0, 0, 0.4);
+  color: rgba(244, 241, 235, 0.8);
+  font-weight: 400;
+  max-width: 540px;
 }
 
-/* Scroll hint arrow */
 .scroll-hint {
   position: absolute;
-  bottom: 2rem;
+  bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -324,53 +364,20 @@ html {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(253, 252, 251, 0.4);
+  color: rgba(244, 241, 235, 0.5);
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   animation: scrollHintPulse 2.5s ease-in-out infinite;
 }
 
 /* ════════════════════════════════════════════════════════════════
-   FEATURE SECTION — standard bento grid below the scroll animation
+   KEYFRAME ANIMATIONS
    ════════════════════════════════════════════════════════════════ */
-
-.feature-section {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 6rem;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .feature-section {
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-}
-
-.feature-heading {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  max-width: 48rem;
-  color: var(--color-foreground);
-}
-
-/* ════════════════════════════════════════════════════════════════
-   ANIMATIONS
-   ════════════════════════════════════════════════════════════════ */
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
 
 @keyframes scrollHintPulse {
@@ -379,7 +386,28 @@ html {
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    opacity: 0.8;
+    opacity: 0.9;
     transform: translateX(-50%) translateY(6px);
   }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.97); }
+}
+
+/* Custom scrollbar for consoles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(46, 64, 54, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(46, 64, 54, 0.4);
 }
