@@ -5,7 +5,7 @@ import {
   Terminal, ShieldCheck, RefreshCw, Sliders, Smartphone, Laptop
 } from 'lucide-react';
 
-export default function InteractiveSimulatorSuite() {
+export default function InteractiveSimulatorSuite({ showHeader = false }) {
   const [activeTab, setActiveTab] = useState('glasses'); // 'glasses' or 'copilot'
   
   // ── Glasses HUD State ──
@@ -110,30 +110,28 @@ export default function InteractiveSimulatorSuite() {
   };
 
   return (
-    <section id="simulator-suite" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
-      {/* Section Header */}
-      <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-14">
-        <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-clay)] mb-3 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[var(--color-clay)] animate-pulse" />
-          Interactive Clinical Experience Lab
-        </span>
-        <h2 className="font-sans font-bold text-3xl md:text-5xl text-white tracking-tight leading-tight">
-          Test the cognitive prosthetic in real-time.
-        </h2>
-        <p className="text-white/70 mt-4 text-base md:text-lg leading-relaxed">
-          Switch between Arthur's smart glasses field-of-view HUD and the caregiver's clinical AI copilot console to inspect zero-cloud edge triage.
-        </p>
+    <section id="simulator-suite" className="py-4 w-full">
+      {showHeader && (
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-10">
+          <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-clay)] mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[var(--color-clay)] animate-pulse" />
+            Interactive Clinical Experience Lab
+          </span>
+          <h2 className="font-sans font-bold text-3xl md:text-5xl text-[var(--color-foreground)] tracking-tight leading-tight">
+            Test the cognitive prosthetic in real-time.
+          </h2>
+          <p className="text-[var(--color-muted-foreground)] mt-3 text-base md:text-lg leading-relaxed font-normal">
+            Switch between Arthur's smart glasses field-of-view HUD and the caregiver's clinical AI copilot console to inspect zero-cloud edge triage.
+          </p>
+        </div>
+      )}
 
-        {/* Tab Switcher Pills */}
-        <div className="mt-8 p-1.5 rounded-full bg-white/10 border border-white/15 flex items-center gap-2 shadow-inner">
+      {/* Tab Switcher Pills */}
+      <div className="flex justify-center mb-8">
+        <div className="p-1.5 rounded-full bg-[var(--color-cream-subtle)] border border-[var(--color-border)] flex items-center gap-2 shadow-sm">
           <button
             onClick={() => setActiveTab('glasses')}
-            className={`btn-magnetic px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 ${
-              activeTab === 'glasses'
-                ? 'bg-[var(--color-moss)] text-white shadow-md'
-                : 'text-white/70 hover:text-white'
-            }`}
-          >
+            className={"btn-magnetic px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 " + (activeTab === "glasses" ? "bg-[var(--color-moss)] text-white shadow-md" : "text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]")}>
             <span className="flex items-center gap-2">
               <Eye size={15} /> 01 / AuraPath Smart Glasses HUD
             </span>
@@ -141,12 +139,7 @@ export default function InteractiveSimulatorSuite() {
 
           <button
             onClick={() => setActiveTab('copilot')}
-            className={`btn-magnetic px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 ${
-              activeTab === 'copilot'
-                ? 'bg-[var(--color-moss)] text-white shadow-md'
-                : 'text-white/70 hover:text-white'
-            }`}
-          >
+            className={"btn-magnetic px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 " + (activeTab === "copilot" ? "bg-[var(--color-moss)] text-white shadow-md" : "text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]")}>
             <span className="flex items-center gap-2">
               <Cpu size={15} /> 02 / AuraGuide Caregiver Copilot
             </span>
@@ -154,9 +147,6 @@ export default function InteractiveSimulatorSuite() {
         </div>
       </div>
 
-      {/* ════════════════════════════════════════════════════════════════
-          TAB 1: AURAPATH SMART GLASSES HUD SIMULATOR
-          ════════════════════════════════════════════════════════════════ */}
       {activeTab === 'glasses' && (
         <div className="bg-[#0D1310] border border-[#23332A] rounded-[2.5rem] p-6 md:p-10 shadow-2xl text-[#F4F1EB]">
           {/* Top Bar */}
