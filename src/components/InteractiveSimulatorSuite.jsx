@@ -198,7 +198,7 @@ export default function InteractiveSimulatorSuite() {
                   playsInline
                   className="w-full h-full object-cover filter brightness-90 contrast-110"
                 >
-                  <source src="/aurapath_film.mp4" type="video/mp4" />
+                  <source src="/aurapath_daughter_7s.mp4" type="video/mp4" />
                 </video>
 
                 {/* HUD Scanline & Noise Layer */}

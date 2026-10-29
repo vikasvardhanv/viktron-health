@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { Eye, Cpu, Battery, Volume2, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
+import React, { useState } from "react";
+import { Eye, Cpu, Battery, Volume2, Sparkles, Video } from "lucide-react";
 
 const HARDWARE_PARTS = [
   {
     id: "optics",
-    label: "01 / Optical Waveguide",
-    title: "Transparent Micro-OLED Waveguide",
-    subtitle: "See without being seen.",
-    desc: "A custom optical prism projects contextual prompts like 'Sarah, your daughter' directly into the patient's visual axis at 60fps. Ambient brightness sensors dynamically adjust luminance for crystal clarity in indoor rooms and bright outdoor gardens.",
+    label: "01 / Optical Architecture",
+    title: "Transparent Waveguide Display",
+    subtitle: "See through. Not at.",
+    desc: "Micro-OLED projection engine channeling 1,200 nits into a holographic diffractive waveguide. Retinal-safe floating clinical guidance at 60 FPS with zero ambient distortion or peripheral obstruction.",
     specs: "60 FPS • 1,200 Nits Peak • 84° FOV",
     icon: Eye,
     color: "var(--color-mint)",
     dotX: "64%",
-    dotY: "38%"
+    dotY: "38%",
+    video: "/hardware_optics.mp4",
+    badge: "Diffractive Micro-Waveguide"
   },
   {
     id: "npu",
@@ -24,7 +26,9 @@ const HARDWARE_PARTS = [
     icon: Cpu,
     color: "var(--color-clay)",
     dotX: "34%",
-    dotY: "60%"
+    dotY: "60%",
+    video: "/hardware_npu.mp4",
+    badge: "26 TOPS Neural Silicon"
   },
   {
     id: "sensors",
@@ -36,7 +40,9 @@ const HARDWARE_PARTS = [
     icon: Battery,
     color: "var(--color-teal)",
     dotX: "62%",
-    dotY: "66%"
+    dotY: "66%",
+    video: "/hardware_sensors.mp4",
+    badge: "Multi-Spectral Biometrics"
   },
   {
     id: "temple",
@@ -48,7 +54,9 @@ const HARDWARE_PARTS = [
     icon: Volume2,
     color: "var(--color-mint)",
     dotX: "20%",
-    dotY: "30%"
+    dotY: "30%",
+    video: "/hardware_temple.mp4",
+    badge: "Temporal Bone Actuator"
   }
 ];
 
@@ -70,7 +78,7 @@ export default function ExplodedHardwareShowcase() {
             Anatomy of the cognitive prosthetic.
           </h2>
           <p className="text-white/70 mt-3 text-sm md:text-base leading-relaxed font-light">
-            Every component is engineered into a featherweight 38g titanium frame to ensure patients look and feel entirely natural.
+            Every component is engineered into a featherweight 38g titanium frame to ensure patients look and feel entirely natural. Select any hardware subsystem below to inspect its dedicated macro footage.
           </p>
         </div>
 
@@ -78,25 +86,32 @@ export default function ExplodedHardwareShowcase() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* LEFT: Video & Interactive Pin Canvas (7 cols) */}
           <div className="lg:col-span-7">
-            <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black border border-white/15 shadow-2xl">
-              {/* Background Exploded Device Video */}
+            <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black border border-white/15 shadow-2xl group">
+              {/* Dynamic Video per Hardware Selection */}
               <video
+                key={selectedPart.id}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover opacity-75 filter brightness-90 contrast-110"
+                className="w-full h-full object-cover filter brightness-95 contrast-110 transition-opacity duration-700"
               >
-                <source src="/test101.mp4" type="video/mp4" />
+                <source src={selectedPart.video} type="video/mp4" />
               </video>
 
               {/* Inward Radial Mask */}
               <div 
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse 70% 65% at 50% 50%, transparent 20%, #0E1512 100%)'
+                  background: "radial-gradient(ellipse 70% 65% at 50% 50%, transparent 35%, #0E1512 100%)"
                 }}
               />
+
+              {/* Active Stream HUD Indicator */}
+              <div className="absolute top-4 left-4 z-20 flex items-center gap-2 font-mono text-[11px] text-white/90 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-lg">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-mint)] animate-pulse" />
+                <span className="tracking-wide">LAYER FEED: <strong className="text-[var(--color-mint)]">{selectedPart.badge}</strong></span>
+              </div>
 
               {/* Interactive Target Callout Pins */}
               {HARDWARE_PARTS.map((part) => {
@@ -105,24 +120,21 @@ export default function ExplodedHardwareShowcase() {
                   <button
                     key={part.id}
                     onClick={() => setSelectedPart(part)}
-                    className="absolute z-20 -translate-x-1/2 -translate-y-1/2 group transition-transform"
+                    className="absolute z-20 -translate-x-1/2 -translate-y-1/2 group/pin transition-transform"
                     style={{ left: part.dotX, top: part.dotY }}
                     aria-label={part.title}
                   >
-                    <span className="relative flex h-7 w-7 items-center justify-center">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                        isSelected ? 'bg-[var(--color-clay)]' : 'bg-[var(--color-mint)]'
-                      }`} />
-                      <span className={`relative inline-flex rounded-full h-4 w-4 border-2 border-white shadow-md ${
-                        isSelected ? 'bg-[var(--color-clay)] scale-125' : 'bg-[var(--color-mint)]'
-                      }`} />
+                    <span className="relative flex h-8 w-8 items-center justify-center">
+                      <span className={"animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 " + (isSelected ? "bg-[var(--color-clay)]" : "bg-[var(--color-mint)]")} />
+                      <span className={"relative inline-flex rounded-full h-4 w-4 border-2 border-white shadow-md transition-all " + (isSelected ? "bg-[var(--color-clay)] scale-125" : "bg-[var(--color-mint)] hover:scale-110")} />
                     </span>
                   </button>
                 );
               })}
 
-              <div className="absolute bottom-4 left-4 z-20 font-mono text-[11px] text-white/60 bg-black/60 px-3 py-1.5 rounded-full border border-white/10">
-                Click pins to inspect hardware layers
+              <div className="absolute bottom-4 left-4 z-20 font-mono text-[11px] text-white/70 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2">
+                <Video size={13} className="text-[var(--color-mint)]" />
+                <span>Showing dedicated {selectedPart.title.split(" ")[0]} video • Click pins or tabs to inspect</span>
               </div>
             </div>
           </div>
@@ -134,7 +146,7 @@ export default function ExplodedHardwareShowcase() {
                 <span className="font-mono text-xs text-[var(--color-mint)] font-bold tracking-widest uppercase">
                   {selectedPart.label}
                 </span>
-                <span className="font-mono text-[10px] text-white/50 border border-white/15 px-2.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] text-white/60 border border-white/15 px-2.5 py-0.5 rounded-full">
                   {selectedPart.specs}
                 </span>
               </div>
@@ -151,7 +163,7 @@ export default function ExplodedHardwareShowcase() {
               </p>
 
               {/* Selector Tabs for Hardware */}
-              <div className="grid grid-cols-2 gap-2 pt-4 border-t border-white/10">
+              <div className="grid grid-cols-2 gap-2.5 pt-4 border-t border-white/10">
                 {HARDWARE_PARTS.map((part) => {
                   const isSelected = selectedPart.id === part.id;
                   const IconComp = part.icon;
@@ -159,14 +171,14 @@ export default function ExplodedHardwareShowcase() {
                     <button
                       key={part.id}
                       onClick={() => setSelectedPart(part)}
-                      className={`p-2.5 rounded-xl border text-left font-mono text-[11px] transition-all flex items-center gap-2 ${
+                      className={"p-3 rounded-xl border text-left font-mono text-[11px] transition-all flex items-center gap-2.5 " + (
                         isSelected
-                          ? 'bg-[var(--color-clay)] border-[var(--color-clay)] text-white shadow-md'
-                          : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
-                      }`}
+                          ? "bg-[var(--color-clay)] border-[var(--color-clay)] text-white shadow-lg shadow-[var(--color-clay)]/20 scale-[1.02]"
+                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+                      )}
                     >
-                      <IconComp size={14} />
-                      <span className="truncate">{part.title.split(' ')[0]}</span>
+                      <IconComp size={15} />
+                      <span className="truncate font-medium">{part.title.split(" ")[0]}</span>
                     </button>
                   );
                 })}
