@@ -13,16 +13,16 @@ export default function Layout() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   React.useLayoutEffect(() => {
-    // Kill all ScrollTriggers BEFORE the route change renders new content
+    // Kill all ScrollTriggers BEFORE route change renders new content
     ScrollTrigger.getAll().forEach(st => {
-      try { st.kill(); } catch (_) { /* already destroyed */ }
+      try { st.kill(); } catch (_) {}
     });
     window.scrollTo(0, 0);
   }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 30) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -33,12 +33,13 @@ export default function Layout() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen flex flex-col font-sans selection:bg-[var(--color-clay)] selection:text-white">
+    <div className="relative w-full min-h-screen flex flex-col font-sans selection:bg-[var(--color-clay)] selection:text-white bg-[var(--color-background)]">
       {/* Global Noise Overlay */}
       <div className="noise-overlay" />
 
       {/* Floating Island Navbar */}
       <Navbar 
+        pathname={pathname}
         isScrolled={isScrolled} 
         onRequestDemo={() => setIsDemoModalOpen(true)} 
       />
@@ -60,18 +61,26 @@ export default function Layout() {
   );
 }
 
-function Navbar({ isScrolled, onRequestDemo }) {
+function Navbar({ pathname, isScrolled, onRequestDemo }) {
+  const navItems = [
+    { label: "Home", to: "/" },
+    { label: "Interactive Lab", to: "/lab" },
+    { label: "Platform", to: "/platform" },
+    { label: "Methodology", to: "/methodology" },
+    { label: "Philosophy", to: "/philosophy" },
+  ];
+
   return (
     <header className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
       <div 
-        className={`pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between px-6 md:px-8 py-3 rounded-full max-w-[1100px] w-full ${
+        className={`pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between px-5 md:px-8 py-2.5 rounded-full max-w-[1150px] w-full ${
           isScrolled 
-            ? 'bg-white/85 backdrop-blur-xl border border-[var(--color-border)] shadow-[0_8px_30px_rgba(46,64,54,0.08)]' 
-            : 'bg-white/50 backdrop-blur-md border border-[var(--color-border)]/60 shadow-sm'
+            ? 'bg-white/90 backdrop-blur-xl border border-[var(--color-border)] shadow-[0_8px_30px_rgba(46,64,54,0.08)]' 
+            : 'bg-white/60 backdrop-blur-md border border-[var(--color-border)]/60 shadow-sm'
         }`}
       >
         {/* Brand Logo & Name */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
           <img 
             src="/viktron-health-logo.png" 
             alt="Viktron Health" 
@@ -87,30 +96,31 @@ function Navbar({ isScrolled, onRequestDemo }) {
           </div>
         </Link>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-wider text-[var(--color-muted-foreground)]">
-          <Link to="/" className="hover:text-[var(--color-foreground)] transition-colors">
-            Home
-          </Link>
-          <a href="/#simulator-suite" className="hover:text-[var(--color-foreground)] transition-colors">
-            Interactive Lab
-          </a>
-          <Link to="/platform" className="hover:text-[var(--color-foreground)] transition-colors">
-            Platform
-          </Link>
-          <Link to="/methodology" className="hover:text-[var(--color-foreground)] transition-colors">
-            Methodology
-          </Link>
-          <Link to="/philosophy" className="hover:text-[var(--color-foreground)] transition-colors">
-            Philosophy
-          </Link>
+        {/* Navigation Links with Active Highlighting */}
+        <nav className="hidden lg:flex items-center gap-2 text-xs font-mono uppercase tracking-wider">
+          {navItems.map((item) => {
+            const isActive = pathname === item.to;
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
+                  isActive
+                    ? 'bg-[var(--color-moss)] text-white font-bold shadow-sm'
+                    : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-black/5'
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Action Button */}
         <div className="flex items-center gap-3">
           <button
             onClick={onRequestDemo}
-            className="btn-magnetic bg-[var(--color-moss)] hover:bg-[var(--color-moss-dark)] text-white px-5 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider shadow-sm"
+            className="btn-magnetic bg-[var(--color-clay)] hover:bg-[var(--color-clay-hover)] text-white px-5 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider shadow-sm"
           >
             Request Demo
           </button>
@@ -155,7 +165,7 @@ function Footer({ onRequestDemo }) {
               <ul className="space-y-3 text-white/60">
                 <li><Link to="/platform" className="hover:text-white transition-colors">AuraPath Smart Glasses</Link></li>
                 <li><Link to="/platform" className="hover:text-white transition-colors">AuraGuide Clinical Copilot</Link></li>
-                <li><a href="/#simulator-suite" className="hover:text-white transition-colors">Interactive Experience Lab</a></li>
+                <li><Link to="/lab" className="hover:text-white transition-colors">Interactive Experience Lab</Link></li>
                 <li><Link to="/methodology" className="hover:text-white transition-colors">Zero-Cloud NPU Security</Link></li>
               </ul>
             </div>

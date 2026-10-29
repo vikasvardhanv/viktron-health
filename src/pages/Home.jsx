@@ -6,11 +6,10 @@ import { ArrowRight, Eye, Play, Sparkles } from 'lucide-react';
 import DiagnosticShuffler from '../components/DiagnosticShuffler';
 import TelemetryTypewriter from '../components/TelemetryTypewriter';
 import CursorProtocolScheduler from '../components/CursorProtocolScheduler';
-import InteractiveSimulatorSuite from '../components/InteractiveSimulatorSuite';
+import ExplodedHardwareShowcase from '../components/ExplodedHardwareShowcase';
 import ProtocolStack from '../components/ProtocolStack';
 import ManifestoSection from '../components/ManifestoSection';
 import ClinicalPricingSection from '../components/ClinicalPricingSection';
-import ExplodedScrubSection from '../components/ExplodedScrubSection';
 import FilmShowcaseSection from '../components/FilmShowcaseSection';
 import FilmModal from '../components/FilmModal';
 
@@ -21,7 +20,6 @@ export default function Home() {
   const [isFilmModalOpen, setIsFilmModalOpen] = useState(false);
 
   useEffect(() => {
-    // Reset scroll restoration so user lands at top
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
@@ -101,13 +99,13 @@ export default function Home() {
               <span>Watch Film (0:20)</span>
             </button>
 
-            <a 
-              href="#simulator-suite" 
+            <Link 
+              to="/lab" 
               className="btn-magnetic px-8 py-4 rounded-full bg-[var(--color-clay)] hover:bg-[var(--color-clay-hover)] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
             >
               <Eye size={15} />
-              <span>Interactive Simulator</span>
-            </a>
+              <span>Interactive Lab</span>
+            </Link>
 
             <button 
               onClick={openDemoModal}
@@ -127,10 +125,10 @@ export default function Home() {
       <FilmShowcaseSection />
 
       {/* ════════════════════════════════════════════════════════════════
-          SCROLL-DRIVEN EXPLODED DEVICE VIEW
-          Uses test101.mp4 — scrubbing frame-by-frame with callout pins
+          INTERACTIVE EXPLODED DEVICE SHOWCASE
+          Seamless interactive view with target pins (no fixed scroll pin bugs)
           ════════════════════════════════════════════════════════════════ */}
-      <ExplodedScrubSection />
+      <ExplodedHardwareShowcase />
 
       {/* ════════════════════════════════════════════════════════════════
           FEATURES — 3 INTERACTIVE FUNCTIONAL ARTIFACTS
@@ -157,13 +155,6 @@ export default function Home() {
           <CursorProtocolScheduler />
         </div>
       </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          LIVE INTERACTIVE SIMULATOR SUITE
-          The complete in-browser digital instrument:
-          AuraPath Smart Glasses POV + AuraGuide Clinical Copilot Console
-          ════════════════════════════════════════════════════════════════ */}
-      <InteractiveSimulatorSuite />
 
       {/* ════════════════════════════════════════════════════════════════
           PHILOSOPHY — "THE MANIFESTO"

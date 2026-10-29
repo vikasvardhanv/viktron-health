@@ -4,11 +4,22 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { 
   Eye, Cpu, Volume2, ShieldCheck, Heart, Sparkles, 
-  ArrowRight, Activity, Battery, Bluetooth, CheckCircle2 
+  ArrowRight, Activity, Battery, Bluetooth, CheckCircle2, Lock
 } from 'lucide-react';
 
 import glassesImg from '../assets/aurapath_glasses.png';
 import guideImg from '../assets/auragide.png';
+
+const TECH_SPECS = [
+  { category: "Optics & Display", spec: "Micro-OLED Waveguide Array", detail: "60 FPS refresh rate • 1,200 nits peak outdoor brightness • 84° FOV" },
+  { category: "Neural Processing", spec: "Hailo-8 Edge AI Processor", detail: "26 TOPS raw compute • 8-bit quantized models • 0.38s vector match latency" },
+  { category: "Acoustics & Voice", spec: "Dual Bone-Conduction Actuators", detail: "18dB intimate whisper threshold • Temporal bone resonance • Zero ear-canal occlusion" },
+  { category: "Biometric Sensing", spec: "Multi-Spectral Physiological Cluster", detail: "Continuous SpO2 • Pulse rate monitoring • 6-axis spatial IMU for gait & fall triage" },
+  { category: "Chassis & Ergonomics", spec: "Aerospace Titanium Unibody", detail: "38 grams total frame weight • Prescription lens compatible • IP54 moisture rating" },
+  { category: "Battery & Power", spec: "Dual Cell Lithium-Polymer", detail: "18 hours continuous active scanning • Fast magnetic charging (80% in 35 mins)" },
+  { category: "Security & Privacy", spec: "Hardware Root-of-Trust Enclave", detail: "100% offline air-gapped vectorization • AES-256 bedside link • Zero raw video storage" },
+  { category: "EHR Interoperability", spec: "HL7 FHIR v4.0.1 API Bridge", detail: "Direct synchronization with EPIC Systems, Cerner Millenium, AthenaHealth" }
+];
 
 export default function Platform() {
   const container = useRef(null);
@@ -27,7 +38,7 @@ export default function Platform() {
       {/* Platform Header */}
       <div className="max-w-4xl mx-auto pt-6 flex flex-col items-center text-center">
         <div className="plat-reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-cream-subtle)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-clay)] mb-6 uppercase tracking-wider">
-          <Sparkles size={14} /> Integrated Cognitive Architecture
+          <Sparkles size={14} /> Hardware & Software Ecosystem
         </div>
         <h1 className="plat-reveal font-sans font-bold text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[0.98] mb-6 text-[var(--color-foreground)]">
           The Two Pillars of <br />
@@ -139,6 +150,48 @@ export default function Platform() {
         </div>
       </div>
 
+      {/* Technical Specifications Table */}
+      <div className="plat-reveal rounded-[2.5rem] bg-white border border-[var(--color-border)] p-8 md:p-12 shadow-sm">
+        <div className="flex items-center justify-between pb-6 border-b border-[var(--color-border)] mb-8 flex-wrap gap-4">
+          <div>
+            <span className="font-mono text-xs uppercase text-[var(--color-clay)] font-bold">
+              Engineering Matrix
+            </span>
+            <h3 className="font-sans font-bold text-2xl md:text-3xl text-[var(--color-foreground)] mt-1">
+              Technical Architecture Specifications
+            </h3>
+          </div>
+          <Link
+            to="/lab"
+            className="btn-magnetic px-6 py-2.5 rounded-full bg-[var(--color-moss)] text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2"
+          >
+            <span>Test In Sandbox</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left font-mono text-xs">
+            <thead>
+              <tr className="border-b border-[var(--color-border)] text-[var(--color-muted-foreground)]">
+                <th className="pb-3 uppercase tracking-wider">Subsystem</th>
+                <th className="pb-3 uppercase tracking-wider">Specification</th>
+                <th className="pb-3 uppercase tracking-wider">Clinical Capability</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--color-border)]/60">
+              {TECH_SPECS.map((item, idx) => (
+                <tr key={idx} className="hover:bg-[var(--color-cream-subtle)] transition-colors">
+                  <td className="py-4 font-bold text-[var(--color-moss)]">{item.category}</td>
+                  <td className="py-4 font-semibold text-[var(--color-foreground)]">{item.spec}</td>
+                  <td className="py-4 text-[var(--color-muted-foreground)] font-sans">{item.detail}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       {/* Action CTA */}
       <div className="plat-reveal rounded-[2.5rem] bg-[#141A17] text-white p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
@@ -151,7 +204,7 @@ export default function Platform() {
         </div>
         <div className="flex items-center gap-4 flex-shrink-0">
           <Link
-            to="/#simulator-suite"
+            to="/lab"
             className="btn-magnetic px-7 py-3.5 rounded-full bg-[var(--color-clay)] text-white text-xs font-mono font-bold uppercase tracking-wider"
           >
             Launch Simulator

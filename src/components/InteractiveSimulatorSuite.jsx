@@ -117,21 +117,21 @@ export default function InteractiveSimulatorSuite() {
           <span className="w-2 h-2 rounded-full bg-[var(--color-clay)] animate-pulse" />
           Interactive Clinical Experience Lab
         </span>
-        <h2 className="font-sans font-bold text-3xl md:text-5xl text-[var(--color-foreground)] tracking-tight leading-tight">
+        <h2 className="font-sans font-bold text-3xl md:text-5xl text-white tracking-tight leading-tight">
           Test the cognitive prosthetic in real-time.
         </h2>
-        <p className="text-[var(--color-muted-foreground)] mt-4 text-base md:text-lg leading-relaxed">
+        <p className="text-white/70 mt-4 text-base md:text-lg leading-relaxed">
           Switch between Arthur's smart glasses field-of-view HUD and the caregiver's clinical AI copilot console to inspect zero-cloud edge triage.
         </p>
 
         {/* Tab Switcher Pills */}
-        <div className="mt-8 p-1.5 rounded-full bg-[var(--color-muted)] border border-[var(--color-border)] flex items-center gap-2 shadow-inner">
+        <div className="mt-8 p-1.5 rounded-full bg-white/10 border border-white/15 flex items-center gap-2 shadow-inner">
           <button
             onClick={() => setActiveTab('glasses')}
             className={`btn-magnetic px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 ${
               activeTab === 'glasses'
                 ? 'bg-[var(--color-moss)] text-white shadow-md'
-                : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'
+                : 'text-white/70 hover:text-white'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -144,7 +144,7 @@ export default function InteractiveSimulatorSuite() {
             className={`btn-magnetic px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 ${
               activeTab === 'copilot'
                 ? 'bg-[var(--color-moss)] text-white shadow-md'
-                : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'
+                : 'text-white/70 hover:text-white'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -168,7 +168,7 @@ export default function InteractiveSimulatorSuite() {
                   AuraGlass Optical HUD Simulator
                 </h3>
               </div>
-              <p className="text-xs font-mono text-[var(--color-muted-foreground)] mt-1">
+              <p className="text-xs font-mono text-white/70 mt-1">
                 Patient Field of View (Simulated Arthur Pendelton POV) • Frame Rate: 60 FPS
               </p>
             </div>
